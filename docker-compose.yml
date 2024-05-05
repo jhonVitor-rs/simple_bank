@@ -23,6 +23,6 @@ services:
     volumes:
       - postgres_volume:/var/lib/postgressql/data
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: app_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: simple_bank_dev
