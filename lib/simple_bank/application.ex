@@ -5,18 +5,19 @@ defmodule SimpleBank.Application do
 
   use Application
 
+  @impl true
   def start(_type, _args) do
     children = [
-      # Start the Ecto repository
-      SimpleBank.Repo,
-      # Start the Telemetry supervisor
       SimpleBankWeb.Telemetry,
-      # Start the PubSub system
+      SimpleBank.Repo,
+      {DNSCluster, query: Application.get_env(:simple_bank, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: SimpleBank.PubSub},
-      # Start the Endpoint (http/https)
-      SimpleBankWeb.Endpoint
+      # Start the Finch HTTP client for sending emails
+      {Finch, name: SimpleBank.Finch},
       # Start a worker by calling: SimpleBank.Worker.start_link(arg)
-      # {SimpleBank.Worker, arg}
+      # {SimpleBank.Worker, arg},
+      # Start to serve requests, typically the last entry
+      SimpleBankWeb.Endpoint
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -27,6 +28,7 @@ defmodule SimpleBank.Application do
 
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
+  @impl true
   def config_change(changed, _new, removed) do
     SimpleBankWeb.Endpoint.config_change(changed, removed)
     :ok

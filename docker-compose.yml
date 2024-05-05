@@ -1,16 +1,28 @@
-version: '3'
-
-volumes:
-  postgres_volume:
-    driver: local
+version: '3.8'
 
 services:
-  postgres:
+  # app:
+    # Nome da imagem definida no Dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    # # Mapeamento da porta da aplicação Phoenix
+    # ports:
+    #   - "4000:4000"
+    # Dependência de banco de dados, se necessário
+    # depends_on:
+    #   - db
+    # Link com o serviço do banco de dados, se necessário
+    # links:
+    #   - db
+    # Definição do serviço do banco de dados, se necessário
+  db:
     image: postgres:13-alpine
     ports:
       - 5432:5432
     volumes:
       - postgres_volume:/var/lib/postgressql/data
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: app_dev

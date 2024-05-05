@@ -19,25 +19,20 @@ defmodule SimpleBankWeb.ConnCase do
 
   using do
     quote do
+      # The default endpoint for testing
+      @endpoint SimpleBankWeb.Endpoint
+
+      use SimpleBankWeb, :verified_routes
+
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
       import SimpleBankWeb.ConnCase
-
-      alias SimpleBankWeb.Router.Helpers, as: Routes
-
-      # The default endpoint for testing
-      @endpoint SimpleBankWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(SimpleBank.Repo)
-
-    unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(SimpleBank.Repo, {:shared, self()})
-    end
-
+    SimpleBank.DataCase.setup_sandbox(tags)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 end

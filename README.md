@@ -1,14 +1,9 @@
 # SimpleBank
-Simple project scheme where it is possible to register users with a respective value and carry out a transfer between them.
-Project made following the tutorial in this video https://www.youtube.com/watch?v=QXunBiLq2SM&t=3928s
-In the project itself, Java Spring was used, I opted for phoenix to improve my knowledge in the same.
 
 To start your Phoenix server:
 
-  * Install dependencies with `mix deps.get`
-  * start the postgres container with docker compose up -d or use any postgress database of your choice
-  * Create and migrate your database with `mix ecto.setup`
-  * Start Phoenix endpoint with `mix phx.server`
+  * Run `mix setup` to install and setup dependencies
+  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
