@@ -3,7 +3,7 @@ defmodule SimpleBank.Repo.Migrations.CreateAccountTable do
 
   def change do
     create table(:accounts) do
-      add :number, :int
+      add :number, :integer
       add :balance, :decimal
       add :type, :account_type
       add :user_id, references(:users, type: :binary_id)
