@@ -1,21 +1,25 @@
-defmodule SimpleBank.Account do
+defmodule SimpleBank.Transaction do
   use Ecto.Schema
 
   import Ecto.Changeset
 
-  alias SimpleBank.{User, Transaction}
+  alias SimpleBank.Account
 
   @field_that_can_be_changes [
     :number,
-    :balance,
+    :amount,
     :type,
-    :user_id
+    :status,
+    :account_id,
+    :recipient_id
   ]
 
   @required_fields [
     :number,
     :type,
-    :user_id
+    :status,
+    :account_id,
+    :recipient_id
   ]
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -24,23 +28,21 @@ defmodule SimpleBank.Account do
     JasonV.Encode,
     only: [
       :number,
-      :balance,
+      :amount,
       :type,
-      :user,
-      :transactions_sent,
-      :transactions_received
+      :status,
+      :recipient
     ]
   }
 
-  schema "accounts" do
+  schema "transactions" do
     field :number, :integer
-    field :balance, :decimal, default: 0
-    field :type, Ecto.Enum, values: [:chain, :savings, :wage]
+    field :amount, :decimal, default: 0
+    field :type, Ecto.Enum, values: [:transfer, :deposit, :withdraw]
+    field :status, Ecto.Enum, values: [:pending, :complete, :incomplete]
 
-    belongs_to :user, User, type: :binary_id
-
-    has_many :transactions_sent, Transaction
-    has_many :transactions_received, Transaction
+    belongs_to :account, Account, type: :binary_id
+    belongs_to :recipient, Account, type: :binary_id
 
     timestamps()
   end
@@ -50,9 +52,10 @@ defmodule SimpleBank.Account do
     struct
     |> cast(params, @field_that_can_be_changes)
     |> validate_required(@required_fields)
-    |> cast_assoc(:user)
+    |> cast_assoc(:account)
+    |> cast_assoc(:recipient)
     |> validate_number(:number, greater_than_or_equal_to: 0)
-    |> validate_number(:balance, greater_than_or_equal_to: 0)
+    |> validate_number(:amount, greater_than_or_equal_to: 0)
     |> unique_constraint(:number)
   end
 end

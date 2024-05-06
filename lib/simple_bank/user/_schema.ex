@@ -39,7 +39,7 @@ defmodule SimpleBank.User do
     ]
   }
 
-  schema "user" do
+  schema "users" do
     field :first_name, :string
     field :last_name, :string
     field :cpf, :string
