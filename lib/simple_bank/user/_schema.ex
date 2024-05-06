@@ -3,6 +3,8 @@ defmodule SimpleBank.User do
 
   import Ecto.Changeset
 
+  alias SimpleBank.Account
+
   @fields_that_can_be_changes [
     :first_name,
     :last_name,
@@ -25,24 +27,27 @@ defmodule SimpleBank.User do
   @foreign_key_type :binary_id
 
   @derive {
-    Jason.Encoder,
+    JasonV.Encoder,
     only: [
       :first_name,
       :last_name,
       :cpf,
       :birth,
       :address,
-      :cep
+      :cep,
+      :accounts
     ]
   }
 
-  schema "users" do
+  schema "user" do
     field :first_name, :string
     field :last_name, :string
     field :cpf, :string
     field :birth, :date
     field :address, :string
     field :cep, :string
+
+    has_many :accounts, Account
 
     timestamps()
   end
