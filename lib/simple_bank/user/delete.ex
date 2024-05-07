@@ -10,7 +10,10 @@ defmodule SimpleBank.User.Delete do
         user <- Repo.get(User, uuid) do
       %User{} = user -> Repo.delete(user)
     else
-
+      :error -> {:error, Error.build(:bad_request, "ID must be a valid UUID!")}
+      nil -> {:error, Error.build(:not_found, "User is not found!")}
     end
   end
+
+  def call(_anything), do: {:error, Error.build(:bad_request, "ID not provided!")}
 end
