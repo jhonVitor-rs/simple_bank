@@ -8,7 +8,7 @@ defmodule SimpleBank.User.Read do
     case Repo.all(User) do
       nil -> {:error, Error.build(:not_found, "Users is not found!")}
       users ->
-        users_with_accounts = Repo.preloaded(users, :accounts)
+        users_with_accounts = Repo.preload(users, :accounts)
         {:ok, users_with_accounts}
     end
   end

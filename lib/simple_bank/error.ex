@@ -1,4 +1,4 @@
-defmodule Rockelivery.Error do
+defmodule SimpleBank.Error do
   alias Ecto.Changeset
 
   @keys [:status, :result]

@@ -6,4 +6,15 @@ defmodule SimpleBank do
   Contexts are also responsible for managing your data, regardless
   if it comes from the database, an external API or others.
   """
+
+  alias SimpleBank.User.Create, as: UserCreate
+  alias SimpleBank.User.Read, as: UserRead
+  alias SimpleBank.User.Update, as: UserUpdate
+  alias SimpleBank.User.Delete, as: UserDelete
+
+  defdelegate create_user(params), to: UserCreate, as: :call
+  defdelegate get_users, to: UserRead, as: :get_all
+  defdelegate get_user_by_id(id), to: UserRead, as: :get_by_id
+  defdelegate update_user(params), to: UserUpdate, as: :call
+  defdelegate delete_user(id), to: UserDelete, as: :call
 end

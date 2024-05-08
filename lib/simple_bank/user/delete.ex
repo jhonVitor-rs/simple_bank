@@ -7,8 +7,8 @@ defmodule SimpleBank.User.Delete do
         | {:ok, Ecto.Struct.t()}
   def call(id) do
     with {:ok, uuid} <- Ecto.UUID.cast(id),
-        user <- Repo.get(User, uuid) do
-      %User{} = user -> Repo.delete(user)
+        %User{} = user <- Repo.get(User, uuid) do
+      Repo.delete(user)
     else
       :error -> {:error, Error.build(:bad_request, "ID must be a valid UUID!")}
       nil -> {:error, Error.build(:not_found, "User is not found!")}

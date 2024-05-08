@@ -21,7 +21,7 @@ defmodule SimpleBank.Account do
   @primary_key {:id, :binary_id, autogenerate: true}
 
   @derive {
-    JasonV.Encode,
+    Jason.Encoder,
     only: [
       :number,
       :balance,
