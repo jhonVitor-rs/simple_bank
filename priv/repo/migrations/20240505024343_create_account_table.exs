@@ -6,7 +6,7 @@ defmodule SimpleBank.Repo.Migrations.CreateAccountTable do
       add :number, :integer
       add :balance, :decimal
       add :type, :account_type
-      add :user_id, references(:users, type: :binary_id)
+      add :user_id, references(:users, type: :binary_id, on_delete: :delete_all)
 
       timestamps()
     end
