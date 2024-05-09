@@ -2,7 +2,7 @@ defmodule SimpleBank.User.Read do
   alias SimpleBank.{User, Repo, Error}
 
   @spec get_all() ::
-        {:error, Struct.t(result: String.t(), status: :not_found)}
+        {:error, Error.t()}
         | {:ok, list(User.t())}
   def get_all() do
     case Repo.all(User) do
@@ -14,7 +14,7 @@ defmodule SimpleBank.User.Read do
   end
 
   @spec get_by_id(binary()) ::
-        {:error, Struct.t(result: String.t(), status: :not_found)}
+        {:error, Error.t()}
         | {:ok, User.t()}
   def get_by_id(id) do
     with {:ok, uuid} <- Ecto.UUID.cast(id),

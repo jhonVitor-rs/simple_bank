@@ -2,10 +2,7 @@ defmodule SimpleBank.User.Update do
   alias SimpleBank.{User, Repo, Error}
 
   @spec call(%{id: binary()}) ::
-        {:error, Struct.t(
-          result: Ecto.Changeset.t() | String.t() | atom(),
-          status: :bad_request
-        )} | {:ok, User.t()}
+        {:error, Error.t()} | {:ok, User.t()}
   def call(%{"id" => id} = params) do
     with {:ok, uuid} <- Ecto.UUID.cast(id),
         user <- Repo.get(User, uuid) do
