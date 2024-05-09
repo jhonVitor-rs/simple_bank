@@ -1,4 +1,5 @@
 defmodule SimpleBankWeb.Router do
+  alias SimpleBankWeb.UserController
   use SimpleBankWeb, :router
 
   pipeline :api do
@@ -7,6 +8,13 @@ defmodule SimpleBankWeb.Router do
 
   scope "/api", SimpleBankWeb do
     pipe_through :api
+
+    get "/users", UserController, :show
+    get "/users/:id", UserController, :show_by_id
+
+    post "/users", UserController, :create
+    patch "/users/:id", UserController, :update
+    delete "/users/:id", UserController, :delete
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
