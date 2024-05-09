@@ -3,6 +3,7 @@ defmodule SimpleBank.Account do
 
   import Ecto.Changeset
 
+  alias Ecto.Association.NotLoaded
   alias SimpleBank.{User, Transaction}
 
   @field_that_can_be_changes [
@@ -19,6 +20,20 @@ defmodule SimpleBank.Account do
   ]
 
   @primary_key {:id, :binary_id, autogenerate: true}
+  @foreign_key_type :binary_id
+
+  @type t :: %__MODULE__{
+    id: binary(),
+    number: integer(),
+    balance: Decimal.t(),
+    type: :chain | :savings | :wage,
+    # user_id: binary(),
+    user: User.t() | NotLoaded.t(),
+    transactions_sent: [Transaction.t()] | NotLoaded.t(),
+    transactions_received: [Transaction.t()] | NotLoaded.t(),
+    inserted_at: DateTime.t(),
+    updated_at: DateTime.t()
+  }
 
   @derive {
     Jason.Encoder,
@@ -28,7 +43,9 @@ defmodule SimpleBank.Account do
       :type,
       :user,
       :transactions_sent,
-      :transactions_received
+      :transactions_received,
+      :inserted_at,
+      :updated_at
     ]
   }
 

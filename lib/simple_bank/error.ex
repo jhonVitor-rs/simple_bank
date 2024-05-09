@@ -7,11 +7,12 @@ defmodule SimpleBank.Error do
 
   defstruct @keys
 
-  @spec build(atom(), String.t() | Changeset.t()) ::
-          Struct.t(
-            result: String.t() | Changeset.t(),
-            status: atom()
-          )
+  @type t :: %__MODULE__{
+    result: String.t() | Changeset.t() | atom(),
+    status: atom()
+  }
+
+  @spec build(atom(), String.t() | Changeset.t()) :: t
   @doc """
   Build error messages.
   """
@@ -25,10 +26,6 @@ defmodule SimpleBank.Error do
   @doc """
   Error default message for status :not_found.
   """
-  @spec build_user_not_found ::
-          Struct.t(
-            result: String.t(),
-            status: :not_found
-          )
+  @spec build_user_not_found :: t
   def build_user_not_found, do: build(:not_found, "User not found")
 end
