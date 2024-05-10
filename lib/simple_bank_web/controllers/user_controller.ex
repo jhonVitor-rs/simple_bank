@@ -22,6 +22,14 @@ defmodule SimpleBankWeb.UserController do
     end
   end
 
+  def show_by_name(conn, %{"user_name" => user_name}) do
+    with {:ok, users} <- SimpleBank.get_user_by_name(user_name) do
+      conn
+      |> put_status(:ok)
+      |> render("all_users.json", users: users)
+    end
+  end
+
   def show_by_id(conn, %{"id" => id}) do
     with {:ok, %User{} = user} <- SimpleBank.get_user_by_id(id) do
       conn

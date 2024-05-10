@@ -9,6 +9,7 @@ defmodule SimpleBankWeb.Router do
     pipe_through :api
 
     get "/users", UserController, :show
+    get "/users/:user_name", UserController, :show_by_name
     get "/users/:id", UserController, :show_by_id
 
     post "/users", UserController, :create
