@@ -1,4 +1,11 @@
 defmodule SimpleBank.User.Delete do
+  @moduledoc """
+  Módulo User.Delete para deletar um usuário do banco de dados
+
+  Este modulo define um serviço para deletar um usuário
+  Fornece uma função que busca um usuário pelo ID e o excluir da tabela.
+  """
+
   alias SimpleBank.{User, Repo, Error}
 
   @spec call(binary()) ::

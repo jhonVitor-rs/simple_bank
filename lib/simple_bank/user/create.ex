@@ -1,4 +1,17 @@
 defmodule SimpleBank.User.Create do
+  @moduledoc """
+  Módulo User.Create para criação de um Usuário para o SimpleBank.
+
+  Este módulo define um serviço de criação para a tabela de "users"
+  fornecendo uma função que recebe como argumento os seguintes campos:
+  - :first_name - uma string contendo o nome do usuário (string)
+  - :last_name - uma string contendo o sobrenome do usuário (string)
+  - :cpf - O CPF do usuário em formato de string (string)
+  - :birth - A data de nascimento do usuário (date)
+  - :address - O endereço do usuário (string)
+  - :cep - O CEP do usuário (string)
+  """
+
   alias SimpleBank.{User, Repo, Error}
 
   @type user_params :: %{
@@ -22,5 +35,8 @@ defmodule SimpleBank.User.Create do
     end
   end
 
+  @doc """
+  Esta função e ativada quando o usuário envia um argumento invalido
+  """
   def call(_anything), do: {:error, "Enter the data in a map format"}
 end
