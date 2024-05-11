@@ -1,4 +1,25 @@
 defmodule SimpleBank.Account do
+  @moduledoc """
+  Modulo Account para o SimpleBank
+
+  Este modulo define o schema para a tabela "accounts" e fornece funçoes para
+  manipular registros de contas, incluindo a criação de um changeset para
+  validação de dados das contas
+
+  Campos do schema:
+  - :number - O número da conta gerado pelo sistema(integer)
+  - :balance - O saldo disponível na conta (decimal)
+  - :type - O tipo da conta que pode ser corrente (:chain), poupança (:saving) e salário (:wage)
+  - :user - Faz referência ao usuário a quem a conta pertence (User.t() ou NotLoaded.t()),
+  - :transaction_sent - Faz referência as transações feitas pela conta (lista de Transaction.t() ou NotLoaded.t())
+  - :transaction_received - Faz referência as transações que a conta recebeu (lista de Transaction.t() ou NotLoaded.t())
+  - :inserted_at - A data e hora da criação da conta (Datetime.t())
+  - :updated_at - A data e hora da ultima atualização do resgistro da conta (Datetime.t())
+
+  Os campos :number, :type, e :user_id são obrigatórios para
+  a criação de uma noca conta.
+  """
+
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -6,6 +27,7 @@ defmodule SimpleBank.Account do
   alias Ecto.Association.NotLoaded
   alias SimpleBank.{User, Transaction}
 
+  # Lista de campos que podem ser alterados diretamente
   @field_that_can_be_changes [
     :number,
     :balance,
@@ -13,15 +35,18 @@ defmodule SimpleBank.Account do
     :user_id
   ]
 
+  # Lista de campos obrigatórios
   @required_fields [
     :number,
     :type,
     :user_id
   ]
 
+  # Define o campo id como chave primária e configura para ser gerado automaticamente
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
 
+  #Define o tipo t para o módulo Account
   @type t :: %__MODULE__{
     id: binary(),
     number: integer(),
@@ -35,6 +60,7 @@ defmodule SimpleBank.Account do
     updated_at: DateTime.t()
   }
 
+  # Define quais campos serão incluídos na codificação para JSON
   @derive {
     Jason.Encoder,
     only: [
@@ -49,6 +75,7 @@ defmodule SimpleBank.Account do
     ]
   }
 
+  # Define o schema para a tabela "accounts"
   schema "accounts" do
     field :number, :integer
     field :balance, :decimal, default: 0
@@ -62,6 +89,7 @@ defmodule SimpleBank.Account do
     timestamps()
   end
 
+  # Define a função changeset com a sua especificação
   @spec changeset(Ecto.Schema.t() | %__MODULE__{}, map()) :: Ecto.Changeset.t()
   def changeset(struct \\ %__MODULE__{}, %{} = params) do
     struct

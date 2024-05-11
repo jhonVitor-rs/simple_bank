@@ -1,4 +1,15 @@
 defmodule SimpleBank.Account.Create do
+  @moduledoc """
+  Módulo Account.Create para criação de uma nova conta no SimpleBank
+
+  Este módulo define um serviço de criação para a tabela de "accounts"
+  fornecendo uma função que recebe como argumento os seguintes campos:
+  - :type - O tipo especifico da conta que pode ser corrente (:chain), poupança (:saving) e salário (:wage)
+  - :user_id - O ID que refeência o usuário a quem a conta pertence
+  O módulo se encarrega de criar um número aleatório para a conta,
+  cado a o número ja exista a função se chamara novamente para gerar um novo número
+  """
+
   alias SimpleBank.{Account, Repo, Error}
 
   @type account_params :: %{
@@ -24,8 +35,14 @@ defmodule SimpleBank.Account.Create do
     end
   end
 
+  @doc """
+  Esta função e ativada quando o usuário envia um argumento invalido
+  """
   def call(_anything), do: {:error, "Enter the data in a map format"}
 
+  @doc """
+  Está é a função privada chamada para gerar um número aleatório para a conta
+  """
   defp create_account_number(type) do
     prefix = case type do
       :chain -> "00"

@@ -1,6 +1,19 @@
 defmodule SimpleBank.Account.Read do
+  @moduledoc """
+  Módulo Account.Read para busca de Contas no banco de dados
+
+  Este módulo executa uma busca no banco de dados para encontras as contas
+  e utiliza a função preload para carregar as transações que cada conta possui.
+  Possui tres funçoes para busa no banco de dados.
+  """
+
   alias SimpleBank.{Account, Repo, Error}
 
+  @doc """
+  Função get_all que executa uma busca completa no banco de dados.
+  Não espera nenhum argumento como parametro.
+  Retorna todas as contas
+  """
   @spec get_all() ::
         {:error, Error.t()} | {:ok, list(Account.t())}
   def get_all() do
@@ -12,6 +25,11 @@ defmodule SimpleBank.Account.Read do
     end
   end
 
+  @doc """
+  Função get_by_user_id que esecuta umas busca pelo campo user_id na tabela de contas
+  Ela espera um ID do usuário como argumento.
+  Retorna um array de contas que pertençam ao mesmo usuário
+  """
   @spec get_by_user_id(binary()) ::
         {:error, Error.t()} | {:ok, list(Account.t())}
   def get_by_user_id(user_id) do
@@ -25,6 +43,11 @@ defmodule SimpleBank.Account.Read do
     end
   end
 
+  @doc """
+  Função get_by_id que executa uma busca mais seleta pelo ID da conta
+  Espera o id como parametro
+  Retorna apenas um usuário correspondente ao ID
+  """
   @spec get_by_id(binary()) ::
         {:error, Error.t()} | {:ok, Account.t()}
   def get_by_id(id) do

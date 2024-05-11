@@ -1,4 +1,11 @@
 defmodule SimpleBank.Account.Delete do
+  @moduledoc """
+  Modulo Account.Delete para deletar uma conta do banco de dados
+
+  Este modulo define um serviço para deletar uma conta
+  Fornece uma função que busca um usuário pelo ID e o exclui da tabela
+  """
+
   alias SimpleBank.{Account, Repo, Error}
 
   @spec call(binary()) ::
