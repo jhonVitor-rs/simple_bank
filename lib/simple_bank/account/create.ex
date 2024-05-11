@@ -40,9 +40,8 @@ defmodule SimpleBank.Account.Create do
   """
   def call(_anything), do: {:error, "Enter the data in a map format"}
 
-  @doc """
-  Está é a função privada chamada para gerar um número aleatório para a conta
-  """
+
+  # Está é a função privada chamada para gerar um número aleatório para a conta
   defp create_account_number(type) do
     prefix = case type do
       :chain -> "00"

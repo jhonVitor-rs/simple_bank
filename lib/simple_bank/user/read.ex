@@ -14,11 +14,25 @@ defmodule SimpleBank.User.Read do
   Função get_all que executa uma busca completa no banco de dados.
   Não espera nenhum argumento como parametro.
   Retorna todos os usuários.
+  A função retorna apenas os campos:
+  - :id
+  - :first_name
+  - :last_name
+  - :cpf
+  - :accounts [
+    - :number
+    - :type
+  ]
   """
   @spec get_all() ::
         {:error, Error.t()} | {:ok, list(User.t())}
   def get_all() do
-    case Repo.all(User) do
+    query = from u in User,
+    join: a in assoc(u, :accounts),
+    select: %{id: u.id, first_name: u.first_name, last_name: u.last_name, cpf: u.cpf, accounts: %{number: a.number, type: a.type}},
+    preload: [:accounts]
+
+    case Repo.all(query) do
       nil -> {:error, Error.build(:not_found, "Users is not found!")}
       users ->
         users_with_accounts = Repo.preload(users, :accounts)
@@ -31,19 +45,28 @@ defmodule SimpleBank.User.Read do
   Ela espera uma string como argumento.
   Retorna um array de usuários que contenham o first_name ou last_name
   que correspondam ao parametro enviado na busca.
+  A função retorna apenas os campos:
+  - :id
+  - :first_name
+  - :last_name
+  - :cpf
+  - :accounts [
+    - :number
+    - :type
+  ]
   """
   @spec get_by_name(String.t()) ::
         {:error, Error.t()} | {:ok, list(User.t())}
   def get_by_name(user_name) do
-    from(u in User,
-      where: ilike(u.first_name, ^"%#{user_name}%") or ilike(u.last_name, ^"%#{user_name}%")
-    )
-    |> Repo.all()
-    |> case do
-      nil -> {:error, Error.build(:not_found, "User is not found!")}
-      users ->
-        users_with_accounts = Repo.preload(users, :accounts)
-        {:ok, users_with_accounts}
+    query = from u in User,
+      join: a in assoc(u, :accounts),
+      where: ilike(u.first_name, ^"%#{user_name}%") or ilike(u.last_name, ^"%#{user_name}%"),
+      select: %{id: u.id, first_name: u.first_name, last_name: u.last_name, cpf: u.cpf, accounts: %{number: a.number, type: a.type}},
+      preload: [:accounts]
+
+    case Repo.all(query) do
+      [] -> {:error, Error.build(:not_found, "User is not found!")}
+      users -> {:ok, users}
     end
   end
 
