@@ -10,11 +10,20 @@ defmodule SimpleBankWeb.Router do
 
     get "/users", UserController, :show
     get "/users/:user_name", UserController, :show_by_name
-    get "/user/:id", UserController, :show_by_id
+    get "/user_by_id/:id", UserController, :show_by_id
 
     post "/user", UserController, :create
     patch "/user/:id", UserController, :update
     delete "/user/:id", UserController, :delete
+
+    get "/accounts", AccountController, :show
+    get "/accounts/:user_id", AccountController, :show_by_user_id
+    get "/account_by_id/:id", AccountController, :show_by_id
+    get "/account_by_number/:number", AccountController, :show_by_number
+
+    post "/account", AccountController, :create
+    patch "/account/:id", AccountController, :update
+    delete "/account/:id", AccountController, :delete
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
