@@ -97,7 +97,6 @@ defmodule SimpleBank.Account do
     |> validate_required(@required_fields)
     |> cast_assoc(:user)
     |> validate_number(:number, greater_than_or_equal_to: 0)
-    |> validate_number(:balance, greater_than_or_equal_to: 0)
     |> unique_constraint(:number)
   end
 end
