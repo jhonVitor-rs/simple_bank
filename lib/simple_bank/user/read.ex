@@ -50,19 +50,19 @@ defmodule SimpleBank.User.Read do
   - :first_name
   - :last_name
   - :cpf
-  - :accounts [
+  - :accounts {[
     - :number
     - :type
-  ]
+  ]}
   """
   @spec get_by_name(String.t()) ::
         {:error, Error.t()} | {:ok, list(User.t())}
   def get_by_name(user_name) do
     query = from u in User,
-      join: a in assoc(u, :accounts),
-      where: ilike(u.first_name, ^"%#{user_name}%") or ilike(u.last_name, ^"%#{user_name}%"),
-      select: %{id: u.id, first_name: u.first_name, last_name: u.last_name, cpf: u.cpf, accounts: %{number: a.number, type: a.type}},
-      preload: [:accounts]
+    join: a in assoc(u, :accounts),
+    where: ilike(u.first_name, ^"%#{user_name}%") or ilike(u.last_name, ^"%#{user_name}%"),
+    select: %{id: u.id, first_name: u.first_name, last_name: u.last_name, cpf: u.cpf, accounts: %{number: a.number, type: a.type}},
+    preload: [:accounts]
 
     case Repo.all(query) do
       [] -> {:error, Error.build(:not_found, "User is not found!")}

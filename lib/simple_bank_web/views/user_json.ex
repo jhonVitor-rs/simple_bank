@@ -1,5 +1,4 @@
 defmodule SimpleBankWeb.UserJSON do
-  alias SimpleBank.User
   alias SimpleBankWeb.ErrorJSON
 
   def render("all_users.json", %{users: users}) do
@@ -15,15 +14,6 @@ defmodule SimpleBankWeb.UserJSON do
   end
 
   def render("user.json", %{user: user}) do
-    %{user: get_user_data(user)}
-  end
-
-  def render("error.json", %{result: result}) do
-    ErrorJSON.error(result)
-  end
-
-  def get_user_data(%User{} = user) do
-
     %{
       id: user.id,
       first_name: user.first_name,
@@ -32,9 +22,22 @@ defmodule SimpleBankWeb.UserJSON do
       birth: user.birth,
       address: user.address,
       cep: user.cep,
-      # accounts
+      accounts: for(account <- user.accounts, do:
+        %{
+          id: account.id,
+          number: account.number,
+          balance: account.balance,
+          type: account.type,
+          inserted_at: account.inserted_at,
+          updated_at: account.updated_at
+        }
+      ),
       inserted_at: user.inserted_at,
       updated_at: user.updated_at
     }
+  end
+
+  def render("error.json", %{result: result}) do
+    ErrorJSON.error(result)
   end
 end

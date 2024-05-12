@@ -42,7 +42,7 @@ defmodule SimpleBankWeb.UserController do
     with {:ok, %User{} = user} <- SimpleBank.update_user(params) do
       conn
       |> put_status(:updated)
-      |> render("user,json", user: user)
+      |> render("user.json", user: user)
     end
   end
 
