@@ -7,7 +7,7 @@ defmodule SimpleBank.Account do
   validação de dados das contas
 
   Campos do schema:
-  - :number - O número da conta gerado pelo sistema(integer)
+  - :number - O número da conta gerado pelo sistema (integer)
   - :balance - O saldo disponível na conta (decimal)
   - :type - O tipo da conta que pode ser corrente (:chain), poupança (:saving) e salário (:wage)
   - :user - Faz referência ao usuário a quem a conta pertence (User.t() ou NotLoaded.t()),

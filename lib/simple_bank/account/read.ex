@@ -74,7 +74,7 @@ defmodule SimpleBank.Account.Read do
   def get_by_id(id) do
     with {:ok, uuid} <- Ecto.UUID.cast(id),
         account <- Repo.get(Account, uuid) do
-      account_with_transactions = Repo.preload(account, [:transaction_sent, :transaction_received])
+      account_with_transactions = Repo.preload(account, [:user, :transaction_sent, :transaction_received])
       {:ok, account_with_transactions}
     else
       :error -> {:error, Error.build(:bad_request, "ID must be a valid UUID!")}
@@ -88,8 +88,8 @@ defmodule SimpleBank.Account.Read do
     case Repo.get(Account, where: [number: number]) do
       nil -> {:error, Error.build(:not_found, "Account not found!")}
       account ->
-        account_with_transactions = Repo.preload(account, [:transaction_sent, :transaction_received])
-        {:ok, account_with_transactions}
+        account_with_details = Repo.preload(account, [:user, :transaction_sent, :transaction_received])
+        {:ok, account_with_details}
     end
   end
 
@@ -97,7 +97,7 @@ defmodule SimpleBank.Account.Read do
   defp create_query(uuid) do
     from a in Account,
       join: u in assoc(a, :user),
-      where: ilike(u.id, ^"%#{uuid}%"),
+      where: u.id == ^uuid,
       select: %{
         id: a.id,
         number: a.number,

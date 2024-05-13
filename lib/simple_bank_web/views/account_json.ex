@@ -20,6 +20,11 @@ defmodule SimpleBankWeb.AccountJSON do
       number: account.number,
       balance: account.balance,
       type: account.type,
+      user: %{
+        first_name: account.user.first_name,
+        last_name: account.user.last_name,
+        cpf: account.user.cpf
+      },
       transactions_sent: for(ts <- account.transaction_sent, do: %{
         id: ts.id,
         number: ts.number,

@@ -9,6 +9,7 @@ defmodule SimpleBank.Account.Create do
   O módulo se encarrega de criar um número aleatório para a conta,
   cado a o número ja exista a função se chamara novamente para gerar um novo número
   """
+  import Ecto.Query
 
   alias SimpleBank.{Account, Repo, Error}
 
@@ -24,13 +25,14 @@ defmodule SimpleBank.Account.Create do
     params_with_number = Map.put(params, :number, number)
 
     case Repo.get(Account, number) do
-      nil -> with changeset <- Account.changeset(params_with_number),
+      nil -> with :ok <- verify_account(params_with_number[:user_id], params_with_number[:type]),
+        changeset <- Account.changeset(params_with_number),
         {:ok, %Account{}} = account <- Repo.insert(changeset) do
           account
         else
           {:error, %Error{}} = error -> error
           {:error, result} -> {:error, Error.build(:bad_request, result)}
-      end
+        end
       _account -> call(params)
     end
   end
@@ -45,8 +47,8 @@ defmodule SimpleBank.Account.Create do
   defp create_account_number(type) do
     prefix = case type do
       :chain -> "00"
-      :savings -> "01"
-      :wage -> "02"
+      :savings -> "06"
+      :wage -> "12"
       _ -> "00"
     end
 
@@ -54,5 +56,28 @@ defmodule SimpleBank.Account.Create do
     account_number = prefix <> Enum.join(random_numbers, "")
 
     account_number
+  end
+
+  # Está função ira verificar se o usuário possui ou não uma conta do mesmo tipo que ele está tentando criar
+  defp verify_account(user_id, type) do
+    query = case type do
+      :chain ->
+        from a in Account,
+        where: a.user_id == ^user_id and (a.type == :chain or a.type == :wage)
+      :wage ->
+        from a in Account,
+        where: a.user_id == ^user_id and (a.type == :chain or a.type == :wage)
+      :saving ->
+        from a in Account,
+        where: a.user_id == ^user_id and a.type == :saving
+      _ ->
+        from a in Account,
+        where: a.user_id == ^user_id and a.type == ^type
+    end
+
+    case Repo.one(query) do
+      nil -> :ok
+      _account -> {:error, Error.build(:bad_request, "An account of this type or similar already exists!")}
+    end
   end
 end
