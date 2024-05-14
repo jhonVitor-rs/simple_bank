@@ -67,7 +67,7 @@ defmodule SimpleBank.Account.Read do
   @doc """
   Função get_by_id que executa uma busca mais seleta pelo ID da conta
   Espera o id como parametro
-  Retorna apenas um usuário correspondente ao ID
+  Retorna apenas uma conta correspondente ao ID
   """
   @spec get_by_id(binary()) ::
         {:error, Error.t()} | {:ok, Account.t()}
