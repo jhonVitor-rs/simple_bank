@@ -37,8 +37,8 @@ defmodule SimpleBank.Transaction.Create do
       {:ok, account} ->
         number = create_transaction_number(type)
         with multi <- build_multi(account, type, amount, receive_number, number),
-        {:ok, result} <- Repo.transaction(multi) do
-          {:ok, result}
+        {:ok, %Transaction{}} <- Repo.transaction(multi) do
+          {:ok, %Transaction{}}
         else
           {:error, _failed_operation, failed_value, _changes_so_far} ->
             %{number: number, type: type, status: :incomplete, amount: amount, account_id: account[:id]}

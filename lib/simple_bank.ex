@@ -31,4 +31,12 @@ defmodule SimpleBank do
   defdelegate get_account_by_number(number), to: AccountRead, as: :get_by_number
   defdelegate update_account(params), to: AccountUpdate, as: :call
   defdelegate delete_account(id), to: AccountDelete, as: :call
+
+  alias SimpleBank.Transaction.Create, as: TransactionCreate
+  alias SimpleBank.Transaction.Read, as: TransactionRead
+  alias SimpleBank.Transaction.Update, as: TransactionUpdate
+
+  defdelegate create_transaction(params), to: TransactionCreate, as: :call
+  defdelegate get_transaction_by_id(id), to: TransactionRead, as: :get_by_id
+  defdelegate update_transaction(params), to: TransactionUpdate, as: :call
 end

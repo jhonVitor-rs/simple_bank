@@ -24,6 +24,10 @@ defmodule SimpleBankWeb.Router do
     post "/account", AccountController, :create
     patch "/account/:id", AccountController, :update
     delete "/account/:id", AccountController, :delete
+
+    get "/transaction_by_id/:id", TransactionController, :show_by_id
+
+    post "/transaction", TransactionController, :create
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
