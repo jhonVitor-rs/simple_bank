@@ -1,4 +1,25 @@
 defmodule SimpleBank.Transaction do
+  @moduledoc """
+  Modulo Transaction para o SimpleBank
+
+  Este módulo define o schema para a tabela "transactions" e fornece uma função
+  para manipular registros de transações, incluindo a criação de um changeset para
+  validação de dados das transações
+
+  Campos do schema:
+  - :number - O número da transação gerado pelo sistema (integer)
+  - :amount - O valor da transação (decimal)
+  - :type - O tipo da transação que pode transferência (:transfer), deposito (:deposit) ou saque (:withdraw)
+  - :status - O status em que a transação se encontra, que pode ser pendente (:pending), completa (:complete) ou incompleta (:incomplete)
+  - :account - Faz referência a conta a qual a transação pertence (Account.t() ou NotLoaded.t())
+  - :recipient - Faz referência a conta que recebeu a transação (account.t() on NotLoaded.t())
+  - :inserted_at - A data em que a transação foi criada (Datetime.t())
+  - :updated_at - A data em que a transação foi atualizada (Datetime.t())
+
+  Os campos :number, :type, :status, :account_id e recipient_id são obrigatórios
+  para a criação de uma nova transação
+  """
+
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -20,8 +41,7 @@ defmodule SimpleBank.Transaction do
     :type,
     :status,
     :account_id,
-    :recipient_id
-  ]
+    ]
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id

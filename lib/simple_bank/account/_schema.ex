@@ -89,12 +89,15 @@ defmodule SimpleBank.Account do
     timestamps()
   end
 
+  def changeset_to_update(struct, %{} = params) do
+    changeset(struct, params, @required_fields -- [:number, :user_id])
+  end
+
   # Define a função changeset com a sua especificação
-  @spec changeset(Ecto.Schema.t() | %__MODULE__{}, map()) :: Ecto.Changeset.t()
-  def changeset(struct \\ %__MODULE__{}, %{} = params) do
+  def changeset(struct \\ %__MODULE__{}, %{} = params, fields \\ @required_fields) do
     struct
     |> cast(params, @field_that_can_be_changes)
-    |> validate_required(@required_fields)
+    |> validate_required(fields)
     |> cast_assoc(:user)
     |> validate_number(:number, greater_than_or_equal_to: 0)
     |> unique_constraint(:number)
