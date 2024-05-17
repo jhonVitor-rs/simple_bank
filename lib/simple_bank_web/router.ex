@@ -8,26 +8,16 @@ defmodule SimpleBankWeb.Router do
   scope "/api", SimpleBankWeb do
     pipe_through :api
 
-    get "/users", UserController, :show
-    get "/users/:user_name", UserController, :show_by_name
-    get "/user_by_id/:id", UserController, :show_by_id
+    resources "/users", UserController, only: [:show, :create, :update, :delete] do
+      get "/name/:user_name", UserController, :show_by_name, as: :show_by_name
+    end
 
-    post "/user", UserController, :create
-    patch "/user/:id", UserController, :update
-    delete "/user/:id", UserController, :delete
+    resources "/accounts", AccountController, only: [:show, :create, :update, :delete] do
+      get "/user_id/:user_id", AccountController, :show_by_user_id, as: :show_by_user_id
+      get "/number/:number", AccountController, :show_by_number, as: :show_by_number
+    end
 
-    get "/accounts", AccountController, :show
-    get "/accounts/:user_id", AccountController, :show_by_user_id
-    get "/account_by_id/:id", AccountController, :show_by_id
-    get "/account_by_number/:number", AccountController, :show_by_number
-
-    post "/account", AccountController, :create
-    patch "/account/:id", AccountController, :update
-    delete "/account/:id", AccountController, :delete
-
-    get "/transaction_by_id/:id", TransactionController, :show_by_id
-
-    post "/transaction", TransactionController, :create
+    resources "/transactions", TransactionController, only: [:show, :create]
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

@@ -15,7 +15,7 @@ defmodule SimpleBankWeb.TransactionController do
     end
   end
 
-  def show_by_id(conn, %{"id" => id}) do
+  def show(conn, %{"id" => id}) do
     with {:ok, %Transaction{} = transaction} <- SimpleBank.get_transaction_by_id(id) do
       conn
       |> put_status(:ok)
