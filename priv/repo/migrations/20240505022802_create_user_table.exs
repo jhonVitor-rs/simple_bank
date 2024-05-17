@@ -3,6 +3,7 @@ defmodule SimpleBank.Repo.Migrations.CreateUserTable do
 
   def change do
     create table(:users) do
+      add :id, :uuid, primary_key: true
       add :first_name, :string
       add :last_name, :string
       add :cpf, :string

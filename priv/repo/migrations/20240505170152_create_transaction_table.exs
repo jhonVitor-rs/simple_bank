@@ -3,6 +3,7 @@ defmodule SimpleBank.Repo.Migrations.CreateTransactionTable do
 
   def change do
     create table(:transactions) do
+      add :id, :uuid, primary_key: true
       add :number, :integer
       add :amount, :decimal
       add :type, :transaction_type

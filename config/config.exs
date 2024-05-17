@@ -11,6 +11,10 @@ config :simple_bank,
   ecto_repos: [SimpleBank.Repo],
   generators: [timestamp_type: :utc_datetime, binary_id: true]
 
+config :rockelivery, SimpleBank.Repo,
+  migration_primary_key: [type: :binary_id],
+  migration_foreign_key: [type: :binary_id]
+
 # Configures the endpoint
 config :simple_bank, SimpleBankWeb.Endpoint,
   url: [host: "localhost"],
