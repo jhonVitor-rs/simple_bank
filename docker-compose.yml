@@ -17,7 +17,7 @@ services:
     #   - db
     # Definição do serviço do banco de dados, se necessário
   db:
-    image: postgres:13-alpine
+    image: postgres:16-alpine3.19
     ports:
       - 5432:5432
     volumes:
@@ -26,3 +26,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: simple_bank_dev
+
+volumes:
+ postgres_volume:
