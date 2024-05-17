@@ -2,8 +2,8 @@ defmodule SimpleBank.Repo.Migrations.CreateTransactionTable do
   use Ecto.Migration
 
   def change do
-    create table(:transactions) do
-      add :id, :uuid, primary_key: true
+    create table :transactions, primary_key: false do
+      add :id, :binary_id, primary_key: true
       add :number, :integer
       add :amount, :decimal
       add :type, :transaction_type

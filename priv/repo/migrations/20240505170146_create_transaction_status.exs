@@ -6,6 +6,6 @@ defmodule SimpleBank.Repo.Migrations.CreateTransactionStatus do
 
     dow_query = "DROP TYPE transaction_status"
 
-    execute(up_query)
+    execute(up_query, dow_query)
   end
 end
