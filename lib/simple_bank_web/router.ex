@@ -8,14 +8,12 @@ defmodule SimpleBankWeb.Router do
   scope "/api", SimpleBankWeb do
     pipe_through :api
 
-    resources "/users", UserController, only: [:show, :create, :update, :delete] do
-      get "/name/:user_name", UserController, :show_by_name, as: :show_by_name
-    end
+    resources "/users", UserController, only: [:index, :show, :create, :update, :delete]
+    get "/users/name/:user_name", UserController, :show_by_name, as: :show_by_name
 
-    resources "/accounts", AccountController, only: [:show, :create, :update, :delete] do
-      get "/user_id/:user_id", AccountController, :show_by_user_id, as: :show_by_user_id
-      get "/number/:number", AccountController, :show_by_number, as: :show_by_number
-    end
+    resources "/accounts", AccountController, only: [:index, :show, :create, :update, :delete]
+    get "/accounts/user_id/:user_id", AccountController, :show_by_user_id, as: :show_by_user_id
+    get "/accounts/number/:number", AccountController, :show_by_number, as: :show_by_number
 
     resources "/transactions", TransactionController, only: [:show, :create]
   end
