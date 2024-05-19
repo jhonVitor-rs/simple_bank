@@ -28,17 +28,26 @@ defmodule SimpleBank.User.Read do
         {:error, Error.t()} | {:ok, list(User.t())}
   def get_all() do
     query = from u in User,
-    join: a in assoc(u, :accounts),
-    select: %{id: u.id, first_name: u.first_name, last_name: u.last_name, cpf: u.cpf, accounts: %{number: a.number, type: a.type}},
-    preload: [:accounts]
+      preload: [:accounts]
 
     case Repo.all(query) do
-      nil -> {:error, Error.build(:not_found, "Users is not found!")}
+      [] -> {:error, Error.build(:not_found, "Users not found!")}
       users ->
-        users_with_accounts = Repo.preload(users, :accounts)
-        {:ok, users_with_accounts}
+        formatted_users = for user <- users do
+          %{
+            id: user.id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            cpf: user.cpf,
+            accounts: for account <- user.accounts do
+              %{number: account.number, type: account.type}
+            end
+          }
+        end
+        {:ok, formatted_users}
     end
   end
+
 
   @doc """
   Função get_by_name que executa uma busca pelos campos first_name ou last_name da tabela de usuário.
@@ -55,20 +64,31 @@ defmodule SimpleBank.User.Read do
     - :type
   ]}
   """
-  @spec get_by_name(String.t()) ::
-        {:error, Error.t()} | {:ok, list(User.t())}
-  def get_by_name(user_name) do
-    query = from u in User,
-    join: a in assoc(u, :accounts),
-    where: ilike(u.first_name, ^"%#{user_name}%") or ilike(u.last_name, ^"%#{user_name}%"),
-    select: %{id: u.id, first_name: u.first_name, last_name: u.last_name, cpf: u.cpf, accounts: %{number: a.number, type: a.type}},
-    preload: [:accounts]
+ @spec get_by_name(String.t()) ::
+      {:error, Error.t()} | {:ok, list(User.t())}
+ def get_by_name(user_name) do
+   query = from u in User,
+     where: ilike(u.first_name, ^"%#{user_name}%") or ilike(u.last_name, ^"%#{user_name}%"),
+     preload: [:accounts]
 
-    case Repo.all(query) do
-      [] -> {:error, Error.build(:not_found, "User is not found!")}
-      users -> {:ok, users}
-    end
-  end
+   case Repo.all(query) do
+     [] -> {:error, Error.build(:not_found, "Users not found!")}
+     users_with_accounts ->
+       formatted_users = for user <- users_with_accounts do
+         %{
+           id: user.id,
+           first_name: user.first_name,
+           last_name: user.last_name,
+           cpf: user.cpf,
+           accounts: for account <- user.accounts do
+             %{number: account.number, type: account.type}
+           end
+         }
+       end
+       {:ok, formatted_users}
+   end
+ end
+
 
   @doc"""
   Função get_by_id que executa uma busca mais seleta pelo ID do usuário.

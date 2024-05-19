@@ -38,5 +38,5 @@ defmodule SimpleBank.User.Create do
   @doc """
   Esta função e ativada quando o usuário envia um argumento invalido
   """
-  def call(_anything), do: {:error, "Enter the data in a map format"}
+  def call(_anything), do: {:error, Error.build(:bad_request, "Enter the data in a map format")}
 end

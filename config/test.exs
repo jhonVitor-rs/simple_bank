@@ -9,7 +9,7 @@ config :simple_bank, SimpleBank.Repo,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
-  database: "simple_bank_dev",
+  database: "simple_bank_test",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2
 
