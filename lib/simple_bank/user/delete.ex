@@ -9,9 +9,7 @@ defmodule SimpleBank.User.Delete do
   alias SimpleBank.{User, Repo, Error}
 
   @spec call(binary()) ::
-        {:error, Ecto.Changeset.t()}
-        | {:error, Error.t()}
-        | {:ok, User.t()}
+        {:error, Error.t()} | {:ok, User.t()}
   def call(id) do
     with {:ok, uuid} <- Ecto.UUID.cast(id),
         %User{} = user <- Repo.get(User, uuid) do

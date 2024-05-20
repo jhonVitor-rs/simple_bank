@@ -31,7 +31,7 @@ defmodule SimpleBank.User.Update do
     with {:ok, uuid} <- Ecto.UUID.cast(id),
         user <- Repo.get(User, uuid) do
       user
-      |> User.changeset(params)
+      |> User.changeset_to_update(params)
       |> Repo.update()
     else
       :error -> {:error, Error.build(:bad_request, "ID must be a valid UUID!")}
