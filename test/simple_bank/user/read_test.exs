@@ -35,7 +35,7 @@ defmodule SimpleBank.User.ReadTest do
     end
   end
 
-  describe "get_byName/1" do
+  describe "get_by_name/1" do
     test "returns :ok when it finds the user that matches the search" do
       User.Create.call(@valid_params)
 
@@ -64,7 +64,9 @@ defmodule SimpleBank.User.ReadTest do
     end
 
     test "Returns an :error if the id is invalid or does not match any user" do
-      assert {:error, %Error{}} = User.Read.get_by_id("0a0a0a0a")
+      non_existent_id = Ecto.UUID.generate()
+
+      assert {:error, %Error{}} = User.Read.get_by_id(non_existent_id)
     end
   end
 end

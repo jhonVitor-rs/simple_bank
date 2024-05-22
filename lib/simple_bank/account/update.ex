@@ -10,6 +10,7 @@ defmodule SimpleBank.Account.Update do
   - :type - O tipo especifico da conta que pode ser corrente (:chain), poupança (:saving) e salário (:wage)
   - :user_id - O ID que refeência o usuário a quem a conta pertence
   """
+  import Ecto.Query
 
   alias SimpleBank.{Account, Repo, Error}
 
@@ -24,12 +25,16 @@ defmodule SimpleBank.Account.Update do
   @spec call(%{id: binary()}) ::
         {:error, Error.t()} | {:ok, Account.t()}
   def call(%{"id" => id} = params) do
+    params = Map.new(params, fn {k, v} -> {String.to_existing_atom(k), v} end)
+
     with {:ok, uuid} <- Ecto.UUID.cast(id),
-        account <- Repo.get(User, uuid) do
+        account when not is_nil(account) <- Repo.get(Account, uuid),
+        :ok <- verify_account(account.user_id, params.type) do
       account
-      |> Account.changeset(params)
+      |> Account.changeset_to_update(params)
       |> Repo.update()
     else
+      {:error, %Error{}} = error -> error
       :error -> {:error, Error.build(:bad_request, "ID must be a valid UUID!")}
       {:error, result} -> {:error, Error.build(:bad_request, result)}
       nil -> {:error, Error.build(:not_found, "Account is not found!")}
@@ -40,4 +45,26 @@ defmodule SimpleBank.Account.Update do
   Está é a função privada chamada para gerar um número aleatório para a conta
   """
   def call(_anything), do: {:error, Error.build(:bad_request, "ID not provided!")}
+
+  defp verify_account(user_id, type) do
+    query = case type do
+      :chain ->
+        from a in Account,
+        where: a.user_id == ^user_id and (a.type == :chain or a.type == :wage)
+      :wage ->
+        from a in Account,
+        where: a.user_id == ^user_id and (a.type == :chain or a.type == :wage)
+      :savings ->
+        from a in Account,
+        where: a.user_id == ^user_id and a.type == :savings
+      _ ->
+        from a in Account,
+        where: a.user_id == ^user_id and a.type == ^type
+    end
+
+    case Repo.one(query) do
+      nil -> :ok
+      _account -> {:error, Error.build(:bad_request, "An account of this type or similar already exists!")}
+    end
+  end
 end

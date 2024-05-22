@@ -99,7 +99,7 @@ defmodule SimpleBank.User.Read do
         {:error, Error.t()} | {:ok, User.t()}
   def get_by_id(id) do
     with {:ok, uuid} <- Ecto.UUID.cast(id),
-        user <- Repo.get(User, uuid) do
+        user when not is_nil(user) <- Repo.get(User, uuid) do
       user_with_accounts = Repo.preload(user, :accounts)
       {:ok, user_with_accounts}
     else

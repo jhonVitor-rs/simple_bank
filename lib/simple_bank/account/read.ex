@@ -27,13 +27,25 @@ defmodule SimpleBank.Account.Read do
   @spec get_all() ::
         {:error, Error.t()} | {:ok, list(Account.t())}
   def get_all() do
-    query = create_query()
+    query = from a in Account,
+      preload: [:user]
 
     case Repo.all(query) do
-      nil -> {:error, Error.build(:not_found, "Accounts not found!")}
+      [] -> {:error, Error.build(:not_found, "Accounts not found!")}
       accounts ->
-        accaounts_with_transactions = Repo.preload(accounts, [:transaction_sent, :transaction_received])
-        {:ok, accaounts_with_transactions}
+        formated_accounts = for account <- accounts do
+          %{
+            id: account.id,
+            number: account.number,
+            type: account.type,
+            user: %{
+              first_name: account.user.first_name,
+              last_name: account.user.last_name,
+              cpf: account.user.cpf
+            }
+          }
+        end
+        {:ok, formated_accounts}
     end
   end
 
@@ -54,13 +66,31 @@ defmodule SimpleBank.Account.Read do
   @spec get_by_user_id(binary()) ::
         {:error, Error.t()} | {:ok, list(Account.t())}
   def get_by_user_id(user_id) do
-    with {:ok, uuid} <- Ecto.UUID.cast(user_id),
-        query <- create_query(uuid),
-        accounts <- Repo.all(query) do
-      {:ok, accounts}
+    with {:ok, uuid} <- Ecto.UUID.cast(user_id) do
+      query = from a in Account,
+        join: u in assoc(a, :user),
+        where: a.user_id == ^uuid,
+        preload: [user: u]
+
+      case Repo.all(query) do
+        [] -> {:error, Error.build(:not_found, "Account is not found!")}
+        accounts ->
+          formated_accounts = for account <- accounts do
+            %{
+              id: account.id,
+              number: account.number,
+              type: account.type,
+              user: %{
+                first_name: account.user.first_name,
+                last_name: account.user.last_name,
+                cpf: account.user.cpf
+              }
+            }
+          end
+          {:ok, formated_accounts}
+      end
     else
       :error -> {:error, Error.build(:bad_request, "ID must be a valid UUID!")}
-      nil -> {:error, Error.build(:not_found, "Account is not found!")}
     end
   end
 
@@ -73,8 +103,8 @@ defmodule SimpleBank.Account.Read do
         {:error, Error.t()} | {:ok, Account.t()}
   def get_by_id(id) do
     with {:ok, uuid} <- Ecto.UUID.cast(id),
-        account <- Repo.get(Account, uuid) do
-      account_with_transactions = Repo.preload(account, [:user, :transaction_sent, :transaction_received])
+        account when not is_nil(account) <- Repo.get(Account, uuid) do
+      account_with_transactions = Repo.preload(account, [:user, :transactions_sent, :transactions_received])
       {:ok, account_with_transactions}
     else
       :error -> {:error, Error.build(:bad_request, "ID must be a valid UUID!")}
@@ -85,46 +115,11 @@ defmodule SimpleBank.Account.Read do
   @spec get_by_number(integer()) ::
         {:error, Error.t()} | {:ok, Account.t()}
   def get_by_number(number) do
-    case Repo.get(Account, where: [number: number]) do
+    case Repo.get_by(Account, number: number) do
       nil -> {:error, Error.build(:not_found, "Account not found!")}
       account ->
-        account_with_details = Repo.preload(account, [:user, :transaction_sent, :transaction_received])
+        account_with_details = Repo.preload(account, [:user, :transactions_sent, :transactions_received])
         {:ok, account_with_details}
     end
-  end
-
-  # Função para criar a query com a busca pelo id do usuário
-  defp create_query(uuid) do
-    from a in Account,
-      join: u in assoc(a, :user),
-      where: u.id == ^uuid,
-      select: %{
-        id: a.id,
-        number: a.number,
-        type: a.type,
-        user: %{
-          first_name: u.first_name,
-          last_name: u.last_name,
-          cpf: u.cpf
-        }
-      },
-      preload: [:user]
-  end
-
-  # Função para criar a query para busca
-  defp create_query() do
-    from a in Account,
-      join: u in assoc(a, :user),
-      select: %{
-        id: a.id,
-        number: a.number,
-        type: a.type,
-        user: %{
-          first_name: u.first_name,
-          last_name: u.last_name,
-          cpf: u.cpf
-        }
-      },
-      preload: [:user]
   end
 end

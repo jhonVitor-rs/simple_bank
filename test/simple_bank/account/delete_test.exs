@@ -1,6 +1,6 @@
-defmodule SimpleBank.User.DeleteTest do
+defmodule SimpleBank.Account.DeleteTest do
   use SimpleBank.DataCase, async: true
-  alias SimpleBank.{User, Error}
+  alias SimpleBank.{Account, User, Error}
 
   @valid_params %{
     first_name: "John",
@@ -14,12 +14,15 @@ defmodule SimpleBank.User.DeleteTest do
   describe "call/1" do
     test "returns success when it was possible to delete the user" do
       {:ok, %User{} = user} = User.Create.call(@valid_params)
-      assert {:ok, %User{}} = User.Delete.call(user.id)
+      {:ok, %Account{} = account} = Account.Create.call(%{type: :chain, user_id: user.id})
+
+      assert {:ok, %Account{}} = Account.Delete.call(account.id)
     end
 
-    test "returns error when an invalid id is passed or user not found" do
+    test "returns error when an invalida id is passed or account not found" do
       non_existent_id = Ecto.UUID.generate()
-      assert {:error, %Error{}} = User.Delete.call(non_existent_id)
+
+      assert {:error, %Error{}} = Account.Delete.call(non_existent_id)
     end
   end
 end

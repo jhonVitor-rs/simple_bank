@@ -29,7 +29,7 @@ defmodule SimpleBank.User.Update do
         {:error, Error.t()} | {:ok, User.t()}
   def call(%{"id" => id} = params) do
     with {:ok, uuid} <- Ecto.UUID.cast(id),
-        user <- Repo.get(User, uuid) do
+        user when not is_nil(user) <- Repo.get(User, uuid) do
       user
       |> User.changeset_to_update(params)
       |> Repo.update()

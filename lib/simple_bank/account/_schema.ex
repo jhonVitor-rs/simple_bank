@@ -90,7 +90,7 @@ defmodule SimpleBank.Account do
   end
 
   def changeset_to_update(struct, %{} = params) do
-    changeset(struct, params, @required_fields -- [:number, :user_id])
+    changeset(struct, params, [:type])
   end
 
   # Define a função changeset com a sua especificação
