@@ -67,6 +67,7 @@ defmodule SimpleBank.Transaction do
       :amount,
       :type,
       :status,
+      :account,
       :recipient,
       :inserted_at,
       :updated_at
@@ -79,8 +80,8 @@ defmodule SimpleBank.Transaction do
     field :type, Ecto.Enum, values: [:transfer, :deposit, :withdraw]
     field :status, Ecto.Enum, values: [:pending, :complete, :incomplete]
 
-    belongs_to :account, Account, type: :binary_id
-    belongs_to :recipient, Account, type: :binary_id
+    belongs_to :account, Account, foreign_key: :account_id
+    belongs_to :recipient, Account, foreign_key: :recipient_id
 
     timestamps()
   end
@@ -90,8 +91,8 @@ defmodule SimpleBank.Transaction do
     struct
     |> cast(params, @field_that_can_be_changes)
     |> validate_required(@required_fields)
-    |> cast_assoc(:account)
-    |> cast_assoc(:recipient)
+    # |> cast_assoc(:account)
+    # |> cast_assoc(:recipient)
     |> validate_number(:number, greater_than_or_equal_to: 0)
     |> validate_number(:amount, greater_than_or_equal_to: 0)
     |> unique_constraint(:number)

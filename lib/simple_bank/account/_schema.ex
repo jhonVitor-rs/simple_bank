@@ -83,8 +83,8 @@ defmodule SimpleBank.Account do
 
     belongs_to :user, User, type: :binary_id
 
-    has_many :transactions_sent, Transaction
-    has_many :transactions_received, Transaction
+    has_many :transactions_sent, Transaction, foreign_key: :account_id
+    has_many :transactions_received, Transaction, foreign_key: :recipient_id
 
     timestamps()
   end
