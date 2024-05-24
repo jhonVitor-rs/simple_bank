@@ -24,15 +24,16 @@ defmodule SimpleBank.Account.Update do
 
   @spec call(%{id: binary()}) ::
         {:error, Error.t()} | {:ok, Account.t()}
-  def call(%{"id" => id} = params) do
-    params = Map.new(params, fn {k, v} -> {String.to_existing_atom(k), v} end)
+  def call(%{id: id} = params) do
+    #params = Map.new(params, fn {k, v} -> {String.to_existing_atom(k), v} end)
 
     with {:ok, uuid} <- Ecto.UUID.cast(id),
         account when not is_nil(account) <- Repo.get(Account, uuid),
-        :ok <- verify_account(account.user_id, params.type) do
-      account
-      |> Account.changeset_to_update(params)
-      |> Repo.update()
+        :ok <- verify_account(account.user_id, params.type),
+        changeset <- Account.changeset_to_update(account, params),
+        {:ok, update_account} <- Repo.update(changeset),
+        account_with_transactions = Repo.preload(update_account, [:user, :transactions_sent, :transactions_received]) do
+      {:ok, account_with_transactions}
     else
       {:error, %Error{}} = error -> error
       :error -> {:error, Error.build(:bad_request, "ID must be a valid UUID!")}

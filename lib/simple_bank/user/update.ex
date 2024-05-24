@@ -27,7 +27,7 @@ defmodule SimpleBank.User.Update do
 
   @spec call(user_params()) ::
         {:error, Error.t()} | {:ok, User.t()}
-  def call(%{"id" => id} = params) do
+  def call(%{id: id} = params) do
     with {:ok, uuid} <- Ecto.UUID.cast(id),
         user when not is_nil(user) <- Repo.get(User, uuid),
         changeset <- User.changeset_to_update(user, params),

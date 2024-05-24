@@ -104,7 +104,7 @@ defmodule SimpleBank.Account.Read do
   def get_by_id(id) do
     with {:ok, uuid} <- Ecto.UUID.cast(id),
         account when not is_nil(account) <- Repo.get(Account, uuid) do
-      account_with_transactions = Repo.preload(account, [:user, :transactions_sent, :transactions_received])
+        account_with_transactions = Repo.preload(account, [:user, :transactions_sent, :transactions_received])
       {:ok, account_with_transactions}
     else
       :error -> {:error, Error.build(:bad_request, "ID must be a valid UUID!")}

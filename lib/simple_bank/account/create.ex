@@ -28,8 +28,9 @@ defmodule SimpleBank.Account.Create do
       nil ->
         with changeset <- Account.changeset(params_with_number),
             :ok <- verify_account(params_with_number[:user_id], params_with_number[:type]),
-            {:ok, %Account{}} = account <- Repo.insert(changeset) do
-          account
+            {:ok, %Account{} = account} <- Repo.insert(changeset),
+            account_with_transactions = Repo.preload(account, [:user, :transactions_sent, :transactions_received]) do
+          {:ok, account_with_transactions}
         else
           {:error, %Error{}} = error -> error
           {:error, result} -> {:error, Error.build(:bad_request, result)}

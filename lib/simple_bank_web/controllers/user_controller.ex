@@ -50,7 +50,7 @@ defmodule SimpleBankWeb.UserController do
     with {:ok, %User{}} <- SimpleBank.delete_user(id) do
       conn
       |> put_status(:no_content)
-      |> render("deleted.json", message: "User deleted with success!")
+      |> render("delete.json", message: "User deleted with success!")
     end
   end
 end

@@ -51,4 +51,8 @@ defmodule SimpleBankWeb.ErrorJSON do
   def render("500.json", _assigns) do
     %{errors: %{detail: "Internal server error"}}
   end
+
+  def render("400.json", %{reason: reason}) do
+    %{error: reason}
+  end
 end

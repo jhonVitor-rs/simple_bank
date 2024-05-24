@@ -19,18 +19,18 @@ defmodule SimpleBank.Account.UpdateTest do
     end
 
     test "updates a accounts fields successfully", %{account: account} do
-      assert {:ok, %Account{} = updated_account} = Account.Update.call(%{"id" => account.id, "type" => :savings})
+      assert {:ok, %Account{} = updated_account} = Account.Update.call(%{id: account.id, type: :savings})
       assert updated_account.type == :savings
     end
 
     test "returns an :error when trying to updates a non-existent account" do
       non_existent_id = Ecto.UUID.generate()
 
-      assert {:error, %Error{}} = Account.Update.call(%{"id" => non_existent_id, "type" => :savings})
+      assert {:error, %Error{}} = Account.Update.call(%{id: non_existent_id, type: :savings})
     end
 
     test "returns :error when id not provided" do
-      assert {:error, %Error{}} = Account.Update.call(%{"type" => :wage})
+      assert {:error, %Error{}} = Account.Update.call(%{type: :wage})
     end
   end
 end

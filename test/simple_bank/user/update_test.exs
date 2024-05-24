@@ -22,15 +22,15 @@ defmodule SimpleBank.User.UpdateTest do
   }
 
   @update_params %{
-    "first_name" => "Jane",
-    "last_name" => "Smith"
+    first_name: "Jane",
+    last_name: "Smith"
   }
 
   describe "call/1" do
     test "umpdates a user's fields successfully" do
       {:ok, %User{} = user} = User.Create.call(@valid_params)
 
-      updated_user_params = Map.merge(@update_params, %{"id" => user.id})
+      updated_user_params = Map.merge(@update_params, %{id: user.id})
       {:ok, %User{} = updated_user} = User.Update.call(updated_user_params)
 
       assert updated_user.first_name == "Jane"
