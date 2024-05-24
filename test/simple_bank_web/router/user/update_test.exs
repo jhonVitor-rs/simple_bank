@@ -4,17 +4,17 @@ defmodule SimpleBankWeb.Router.User.UpdateTest do
   alias SimpleBank.User
 
   @user_params %{
-    first_name: "John",
-    last_name: "Doe",
-    cpf: "12345678900",
-    birth: ~D[2000-01-01],
-    address: "Rua A, 123",
-    cep: "80000000"
+    "first_name" => "John",
+    "last_name" => "Doe",
+    "cpf" => "12345678900",
+    "birth" => "2000-01-01",
+    "address" => "Rua A, 123",
+    "cep" => "80000000"
   }
 
   @update_params %{
-    first_name: "Tony",
-    last_name: "Stark",
+    "first_name" => "Tony",
+    "last_name" => "Stark",
   }
 
   describe "call/1" do

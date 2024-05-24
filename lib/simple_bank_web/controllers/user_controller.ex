@@ -31,6 +31,8 @@ defmodule SimpleBankWeb.UserController do
   end
 
   def create(conn, params) do
+    params = Map.new(params, fn {k, v} -> {String.to_existing_atom(k), v} end)
+
     with {:ok, %User{} = user} <- SimpleBank.create_user(params) do
       conn
       |> put_status(:created)
@@ -39,6 +41,8 @@ defmodule SimpleBankWeb.UserController do
   end
 
   def update(conn, params) do
+    params = Map.new(params, fn {k, v} -> {String.to_existing_atom(k), v} end)
+
     with {:ok, %User{} = user} <- SimpleBank.update_user(params) do
       conn
       |> put_status(:ok)

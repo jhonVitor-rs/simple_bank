@@ -4,18 +4,18 @@ defmodule SimpleBankWeb.Router.User.CreateTest do
   alias SimpleBank.User
 
   @user_params %{
-    first_name: "John",
-    last_name: "Doe",
-    cpf: "12345678900",
-    birth: ~D[2000-01-01],
-    address: "Rua A, 123",
-    cep: "80000000"
+    "first_name" => "John",
+    "last_name" => "Doe",
+    "cpf" => "12345678900",
+    "birth" => "2000-01-01",
+    "address" => "Rua A, 123",
+    "cep" => "80000000"
   }
 
   @invalid_params %{
-    first_name: "John",
-    last_name: "Doe",
-    cpf: "12345678900",
+    "first_name" => "John",
+    "last_name" => "Doe",
+    "cpf" => "12345678900",
   }
 
   describe "call/1" do
