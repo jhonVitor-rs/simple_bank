@@ -41,7 +41,7 @@ defmodule SimpleBankWeb.UserController do
   def update(conn, params) do
     with {:ok, %User{} = user} <- SimpleBank.update_user(params) do
       conn
-      |> put_status(:updated)
+      |> put_status(:ok)
       |> render("user.json", user: user)
     end
   end
@@ -50,7 +50,7 @@ defmodule SimpleBankWeb.UserController do
     with {:ok, %User{}} <- SimpleBank.delete_user(id) do
       conn
       |> put_status(:no_content)
-      |> text("")
+      |> render("deleted.json", message: "User deleted with success!")
     end
   end
 end

@@ -47,4 +47,8 @@ defmodule SimpleBankWeb.ErrorJSON do
 
   defp translate_value({:parameterized, Ecto.Enum, _map}), do: ""
   defp translate_value(value), do: to_string(value)
+
+  def render("500.json", _assigns) do
+    %{errors: %{detail: "Internal server error"}}
+  end
 end

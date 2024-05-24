@@ -27,8 +27,9 @@ defmodule SimpleBank.User.Create do
         {:error, Error.t()} | {:ok, User.t()}
   def call(%{} = params) do
     with changeset <- User.changeset(params),
-        {:ok, %User{}} = user <- Repo.insert(changeset) do
-      user
+        {:ok, %User{} = user} <- Repo.insert(changeset),
+        user = Repo.preload(user, :accounts) do
+      {:ok, user}
     else
       {:error, %Error{}} = error -> error
       {:error, result} -> {:error, Error.build(:bad_request, result)}

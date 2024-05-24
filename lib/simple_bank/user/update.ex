@@ -29,10 +29,11 @@ defmodule SimpleBank.User.Update do
         {:error, Error.t()} | {:ok, User.t()}
   def call(%{"id" => id} = params) do
     with {:ok, uuid} <- Ecto.UUID.cast(id),
-        user when not is_nil(user) <- Repo.get(User, uuid) do
-      user
-      |> User.changeset_to_update(params)
-      |> Repo.update()
+        user when not is_nil(user) <- Repo.get(User, uuid),
+        changeset <- User.changeset_to_update(user, params),
+        {:ok, update_user} <- Repo.update(changeset),
+        user_with_accounts <- Repo.preload(update_user, :accounts) do
+      {:ok, user_with_accounts}
     else
       :error -> {:error, Error.build(:bad_request, "ID must be a valid UUID!")}
       {:error, result} -> {:error, Error.build(:bad_request, result)}

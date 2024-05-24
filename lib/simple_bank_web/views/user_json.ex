@@ -14,4 +14,8 @@ defmodule SimpleBankWeb.UserJSON do
   def render("error.json", %{result: result}) do
     ErrorJSON.error(result)
   end
+
+  def render("deleted.json", %{message: message}) do
+    %{message: message}
+  end
 end

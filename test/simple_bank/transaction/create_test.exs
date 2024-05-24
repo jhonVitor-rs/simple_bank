@@ -138,7 +138,7 @@ defmodule SimpleBank.Transaction.CreateTest do
     # e possivel envia-lo mas a função não ira utiliza-lo
     test "returns :ok for deposits into current and savings accounts",
     %{chain_john: chain_john, savings_antony: savings_antony} do
-      assert {:ok, %Transaction{} = savings} = Transaction.Create.call(%{
+      assert {:ok, %Transaction{}} = Transaction.Create.call(%{
         type: :deposit,
         amount: Decimal.new("50"),
         account_number: chain_john.number
@@ -148,8 +148,6 @@ defmodule SimpleBank.Transaction.CreateTest do
         amount: Decimal.new("50"),
         account_number: savings_antony.number
       })
-
-      IO.inspect(savings)
     end
 
     test "returns :error for deposits into salary account",
