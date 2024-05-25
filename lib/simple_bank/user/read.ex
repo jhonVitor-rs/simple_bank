@@ -32,19 +32,7 @@ defmodule SimpleBank.User.Read do
 
     case Repo.all(query) do
       [] -> {:error, Error.build(:not_found, "Users not found!")}
-      users ->
-        formatted_users = for user <- users do
-          %{
-            id: user.id,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            cpf: user.cpf,
-            accounts: for account <- user.accounts do
-              %{number: account.number, type: account.type}
-            end
-          }
-        end
-        {:ok, formatted_users}
+      users -> {:ok, users}
     end
   end
 
@@ -73,19 +61,7 @@ defmodule SimpleBank.User.Read do
 
    case Repo.all(query) do
      [] -> {:error, Error.build(:not_found, "Users not found!")}
-     users_with_accounts ->
-       formatted_users = for user <- users_with_accounts do
-         %{
-           id: user.id,
-           first_name: user.first_name,
-           last_name: user.last_name,
-           cpf: user.cpf,
-           accounts: for account <- user.accounts do
-             %{number: account.number, type: account.type}
-           end
-         }
-       end
-       {:ok, formatted_users}
+     users -> {:ok, users}
    end
  end
 

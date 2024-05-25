@@ -23,10 +23,10 @@ defmodule SimpleBankWeb.Router.User.CreateTest do
       conn = post(conn, "/api/users",@user_params)
       user = json_response(conn, :created)
 
-      assert user["user"]["id"] != nil
-      assert user["user"]["first_name"] == "John"
-      assert user["user"]["last_name"] == "Doe"
-      assert user["user"]["cpf"] == "12345678900"
+      assert user["id"] != nil
+      assert user["first_name"] == "John"
+      assert user["last_name"] == "Doe"
+      assert user["cpf"] == "12345678900"
     end
 
     test "returns :error if you try to register the same CPF twice", %{conn: conn} do

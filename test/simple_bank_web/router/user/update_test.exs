@@ -15,6 +15,7 @@ defmodule SimpleBankWeb.Router.User.UpdateTest do
   @update_params %{
     "first_name" => "Tony",
     "last_name" => "Stark",
+    "birth" => "2000-02-01",
   }
 
   describe "call/1" do
@@ -27,8 +28,8 @@ defmodule SimpleBankWeb.Router.User.UpdateTest do
       conn = put(conn, "/api/users/#{user.id}", @update_params)
       user = json_response(conn, :ok)
 
-      assert user["user"]["first_name"] == "Tony"
-      assert user["user"]["last_name"] == "Stark"
+      assert user["first_name"] == "Tony"
+      assert user["last_name"] == "Stark"
     end
 
     test "returns :error if no corresponding user is found for the id", %{conn: conn} do

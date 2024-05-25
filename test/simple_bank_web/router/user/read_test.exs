@@ -38,10 +38,10 @@ defmodule SimpleBankWeb.Router.User.ReadTest do
       conn = get(conn, "/api/users/#{u.id}")
       user = json_response(conn, :ok)
 
-      assert user["user"]["id"] == u.id
-      assert user["user"]["first_name"] == u.first_name
-      assert user["user"]["last_name"] == u.last_name
-      assert user["user"]["cpf"] == u.cpf
+      assert user["id"] == u.id
+      assert user["first_name"] == u.first_name
+      assert user["last_name"] == u.last_name
+      assert user["cpf"] == u.cpf
     end
 
     test "returns :not_found if the user is not found", %{conn: conn} do
