@@ -26,6 +26,7 @@ defmodule SimpleBank do
 
   defdelegate create_account(params), to: AccountCreate, as: :call
   defdelegate get_accounts, to: AccountRead, as: :get_all
+  defdelegate get_accounts_by_type(type), to: AccountRead, as: :get_by_type
   defdelegate get_accounts_by_user_id(user_id), to: AccountRead, as: :get_by_user_id
   defdelegate get_account_by_id(id), to: AccountRead, as: :get_by_id
   defdelegate get_account_by_number(number), to: AccountRead, as: :get_by_number

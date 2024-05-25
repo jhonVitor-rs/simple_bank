@@ -14,6 +14,7 @@ defmodule SimpleBankWeb.Router do
     resources "/accounts", AccountController, only: [:index, :show, :create, :update, :delete]
     get "/accounts/user_id/:user_id", AccountController, :show_by_user_id, as: :show_by_user_id
     get "/accounts/number/:number", AccountController, :show_by_number, as: :show_by_number
+    get "/accounts/type/:type", AccountController, :show_by_type, as: :show_by_type
 
     resources "/transactions", TransactionController, only: [:show, :create]
   end

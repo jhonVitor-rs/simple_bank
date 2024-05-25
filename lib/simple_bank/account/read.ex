@@ -32,20 +32,35 @@ defmodule SimpleBank.Account.Read do
 
     case Repo.all(query) do
       [] -> {:error, Error.build(:not_found, "Accounts not found!")}
-      accounts ->
-        formated_accounts = for account <- accounts do
-          %{
-            id: account.id,
-            number: account.number,
-            type: account.type,
-            user: %{
-              first_name: account.user.first_name,
-              last_name: account.user.last_name,
-              cpf: account.user.cpf
-            }
-          }
-        end
-        {:ok, formated_accounts}
+      accounts -> {:ok, accounts}
+    end
+  end
+
+  @doc """
+  Função get_by_type que executa uma busca pelo tipo da conta no banco de dados.
+  Ela espera o tipo da conta como parametro.
+  Retorna todas as contas correspondentes a busca.
+  A função retorna apenas os campos:
+  - :id
+  - :number
+  - :type
+  - user {
+    - :first_name
+    - :last_name
+    - :cpf
+  }
+  """
+  @spec get_by_type(atom()) ::
+        {:error, Error.t()} | {:ok, list(Account.t())}
+  def get_by_type(type) do
+    query = from a in Account,
+        join: u in assoc(a, :user),
+        where: a.type == ^type,
+        preload: [user: u]
+
+    case Repo.all(query) do
+      [] -> {:error, Error.build(:not_found, "Account is not found!")}
+      accounts -> {:ok, accounts}
     end
   end
 
@@ -74,20 +89,7 @@ defmodule SimpleBank.Account.Read do
 
       case Repo.all(query) do
         [] -> {:error, Error.build(:not_found, "Account is not found!")}
-        accounts ->
-          formated_accounts = for account <- accounts do
-            %{
-              id: account.id,
-              number: account.number,
-              type: account.type,
-              user: %{
-                first_name: account.user.first_name,
-                last_name: account.user.last_name,
-                cpf: account.user.cpf
-              }
-            }
-          end
-          {:ok, formated_accounts}
+        accounts -> {:ok, accounts}
       end
     else
       :error -> {:error, Error.build(:bad_request, "ID must be a valid UUID!")}
@@ -104,8 +106,8 @@ defmodule SimpleBank.Account.Read do
   def get_by_id(id) do
     with {:ok, uuid} <- Ecto.UUID.cast(id),
         account when not is_nil(account) <- Repo.get(Account, uuid) do
-        account_with_transactions = Repo.preload(account, [:user, :transactions_sent, :transactions_received])
-      {:ok, account_with_transactions}
+        account = Repo.preload(account, [:user, :transactions_sent, :transactions_received])
+      {:ok, account}
     else
       :error -> {:error, Error.build(:bad_request, "ID must be a valid UUID!")}
       nil -> {:error, Error.build(:not_found, "Account is not found!")}
@@ -118,8 +120,8 @@ defmodule SimpleBank.Account.Read do
     case Repo.get_by(Account, number: number) do
       nil -> {:error, Error.build(:not_found, "Account not found!")}
       account ->
-        account_with_details = Repo.preload(account, [:user, :transactions_sent, :transactions_received])
-        {:ok, account_with_details}
+        account = Repo.preload(account, [:user, :transactions_sent, :transactions_received])
+        {:ok, account}
     end
   end
 end

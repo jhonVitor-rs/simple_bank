@@ -7,7 +7,7 @@ defmodule SimpleBankWeb.AccountController do
   action_fallback FallbackController
 
   def index(conn, _params) do
-    with {:ok, accounts} <- SimpleBank.get_accounts() do
+    with {:ok, [%Account{}] = accounts} <- SimpleBank.get_accounts() do
       conn
       |> put_status(:ok)
       |> render("all_accounts.json", accounts: accounts)
@@ -22,6 +22,16 @@ defmodule SimpleBankWeb.AccountController do
     end
   end
 
+  def show_by_type(conn, %{"type" => type}) do
+    type_atom = String.to_existing_atom(type)
+
+    with {:ok, [%Account{}] = accounts} <- SimpleBank.get_accounts_by_type(type_atom) do
+      conn
+      |> put_status(:ok)
+      |> render("all_accounts.json", accounts: accounts)
+    end
+  end
+
   def show_by_number(conn, %{"number" => number}) do
     with {:ok, %Account{} = account} <- SimpleBank.get_account_by_number(number) do
       conn
@@ -31,7 +41,7 @@ defmodule SimpleBankWeb.AccountController do
   end
 
   def show_by_user_id(conn, %{"user_id" => user_id}) do
-    with {:ok, accounts} <- SimpleBank.get_accounts_by_user_id(user_id) do
+    with {:ok, [%Account{}] = accounts} <- SimpleBank.get_accounts_by_user_id(user_id) do
       conn
       |> put_status(:ok)
       |> render("all_accounts.json", accounts: accounts)

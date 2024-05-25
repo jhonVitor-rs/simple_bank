@@ -28,6 +28,18 @@ defmodule SimpleBank.Account.ReadTest do
     end
   end
 
+  describe "get_by_type/1" do
+    test "return all accounts by type", %{user: user} do
+      {:ok, %Account{}} = Account.Create.call(%{type: :chain, user_id: user.id})
+
+      assert {:ok, _accounts} = Account.Read.get_by_type(:chain)
+    end
+
+    test "returns an error not found if no account is found for the type" do
+      assert {:error, %Error{}} = Account.Read.get_by_type(:chain)
+    end
+  end
+
   describe "get_by_user_id/1" do
     test "return all accounts by user_id", %{user: user}  do
       {:ok, %Account{}} = Account.Create.call(%{type: :chain, user_id: user.id})
