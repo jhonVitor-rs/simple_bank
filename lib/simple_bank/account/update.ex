@@ -25,11 +25,9 @@ defmodule SimpleBank.Account.Update do
   @spec call(%{id: binary()}) ::
         {:error, Error.t()} | {:ok, Account.t()}
   def call(%{id: id} = params) do
-    #params = Map.new(params, fn {k, v} -> {String.to_existing_atom(k), v} end)
-
     with {:ok, uuid} <- Ecto.UUID.cast(id),
         account when not is_nil(account) <- Repo.get(Account, uuid),
-        :ok <- verify_account(account.user_id, params.type),
+        :ok <- verify_account(account.user_id, params.type, uuid),
         changeset <- Account.changeset_to_update(account, params),
         {:ok, update_account} <- Repo.update(changeset),
         account_with_transactions = Repo.preload(update_account, [:user, :transactions_sent, :transactions_received]) do
@@ -47,20 +45,20 @@ defmodule SimpleBank.Account.Update do
   """
   def call(_anything), do: {:error, Error.build(:bad_request, "ID not provided!")}
 
-  defp verify_account(user_id, type) do
+  defp verify_account(user_id, type, account_id) do
     query = case type do
-      :chain ->
+      "chain" ->
         from a in Account,
-        where: a.user_id == ^user_id and (a.type == :chain or a.type == :wage)
-      :wage ->
+        where: a.user_id == ^user_id and a.id != ^account_id and (a.type == :chain or a.type == :wage)
+      "wage" ->
         from a in Account,
-        where: a.user_id == ^user_id and (a.type == :chain or a.type == :wage)
-      :savings ->
+        where: a.user_id == ^user_id and a.id != ^account_id and (a.type == :chain or a.type == :wage)
+      "savings" ->
         from a in Account,
-        where: a.user_id == ^user_id and a.type == :savings
+        where: a.user_id == ^user_id and a.id != ^account_id and a.type == :savings
       _ ->
         from a in Account,
-        where: a.user_id == ^user_id and a.type == ^type
+        where: a.user_id == ^user_id and a.id != ^account_id and a.type == ^type
     end
 
     case Repo.one(query) do

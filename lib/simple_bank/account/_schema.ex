@@ -64,6 +64,7 @@ defmodule SimpleBank.Account do
   @derive {
     Jason.Encoder,
     only: [
+      :id,
       :number,
       :balance,
       :type,

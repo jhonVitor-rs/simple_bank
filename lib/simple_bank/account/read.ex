@@ -59,7 +59,7 @@ defmodule SimpleBank.Account.Read do
         preload: [user: u]
 
     case Repo.all(query) do
-      [] -> {:error, Error.build(:not_found, "Account is not found!")}
+      [] -> {:error, Error.build(:not_found, "Accounts not found!")}
       accounts -> {:ok, accounts}
     end
   end
@@ -88,7 +88,7 @@ defmodule SimpleBank.Account.Read do
         preload: [user: u]
 
       case Repo.all(query) do
-        [] -> {:error, Error.build(:not_found, "Account is not found!")}
+        [] -> {:error, Error.build(:not_found, "Accounts not found!")}
         accounts -> {:ok, accounts}
       end
     else

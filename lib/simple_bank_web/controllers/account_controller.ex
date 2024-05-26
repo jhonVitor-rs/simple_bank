@@ -63,7 +63,7 @@ defmodule SimpleBankWeb.AccountController do
 
     with {:ok, %Account{} = account} <- SimpleBank.update_account(params) do
       conn
-      |> put_status(:updated)
+      |> put_status(:ok)
       |> render("account.json", account: account)
     end
   end
@@ -72,7 +72,7 @@ defmodule SimpleBankWeb.AccountController do
     with {:ok, %Account{}} <- SimpleBank.delete_account(id) do
       conn
       |> put_status(:no_content)
-      |> text("")
+      |> render("delete.json", message: "Account deleted with success!")
     end
   end
 end

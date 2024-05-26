@@ -63,13 +63,13 @@ defmodule SimpleBank.Account.Create do
   # Está função ira verificar se o usuário possui ou não uma conta do mesmo tipo que ele está tentando criar
   defp verify_account(user_id, type) when is_binary(user_id) do
     query = case type do
-      :chain ->
+      "chain" ->
         from a in Account,
         where: a.user_id == ^user_id and (a.type == :chain or a.type == :wage)
-      :wage ->
+      "wage" ->
         from a in Account,
         where: a.user_id == ^user_id and (a.type == :chain or a.type == :wage)
-      :savings ->
+      "savings" ->
         from a in Account,
         where: a.user_id == ^user_id and a.type == :savings
       _ ->
