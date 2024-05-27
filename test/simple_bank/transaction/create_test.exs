@@ -100,7 +100,7 @@ defmodule SimpleBank.Transaction.CreateTest do
     %{chain_john: chain_john} do
       assert {:error, %Error{}} = Transaction.Create.call(%{
         type: :transfer,
-        amount: Decimal.new("60"),
+        amount: Decimal.new("10"),
         account_number: chain_john.number,
         recipient_number: 054648469
       })

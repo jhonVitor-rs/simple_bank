@@ -25,6 +25,19 @@ defmodule SimpleBank.Account.CreateTest do
       assert {:ok, %Account{}} = Account.Create.call(account_params2)
     end
 
+    test "returns error when trying to create an account of the same type that already exists", %{user: user} do
+      account_chain_params = %{type: :chain, user_id: user.id}
+      account_savings_params = %{type: :savings, user_id: user.id}
+      account_wage_params = %{type: :wage, user_id: user.id}
+
+      Account.Create.call(account_chain_params)
+      Account.Create.call(account_savings_params)
+
+      assert {:error, %Error{}} = Account.Create.call(account_savings_params)
+      assert {:error, %Error{}} = Account.Create.call(account_wage_params)
+      assert {:error, %Error{}} = Account.Create.call(account_chain_params)
+    end
+
     test "returns :error when invalid params are passed" do
       account_params = %{type: :chain}
 

@@ -12,7 +12,7 @@ defmodule SimpleBank.Error do
     status: atom()
   }
 
-  @spec build(atom(), String.t() | Changeset.t()) :: t
+  @spec build(atom(), String.t() | Changeset.t() | atom()) :: t
   @doc """
   Build error messages.
   """
@@ -22,10 +22,4 @@ defmodule SimpleBank.Error do
       status: status
     }
   end
-
-  @doc """
-  Error default message for status :not_found.
-  """
-  @spec build_user_not_found :: t
-  def build_user_not_found, do: build(:not_found, "User not found")
 end

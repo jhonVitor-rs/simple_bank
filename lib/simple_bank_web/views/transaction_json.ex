@@ -1,14 +1,11 @@
 defmodule SimpleBankWeb.TransactionJSON do
   alias SimpleBankWeb.ErrorJSON
 
-  def render("transaction.json", %{transaction: transaction}) do
-    %{
-      id: transaction.id,
-      number: transaction.number,
-      amount: transaction.amount,
-      type: transaction.type,
-      status: transaction.status,
-      recipient: %{
+  alias SimpleBank.Transaction
+
+  def render("transaction.json", %{transaction: %Transaction{} = transaction}) do
+    recipient = if transaction.recipient do
+      %{
         number: transaction.recipient.number,
         type: transaction.recipient.type,
         user: %{
@@ -16,7 +13,18 @@ defmodule SimpleBankWeb.TransactionJSON do
           last_name: transaction.recipient.user.last_name,
           cpf: transaction.recipient.user.cpf
         }
-      },
+      }
+    else
+      nil
+    end
+
+    %{
+      id: transaction.id,
+      number: transaction.number,
+      amount: transaction.amount,
+      type: transaction.type,
+      status: transaction.status,
+      recipient: recipient,
       inserted_at: transaction.inserted_at,
       updated_at: transaction.updated_at
     }

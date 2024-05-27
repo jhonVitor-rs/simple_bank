@@ -29,8 +29,8 @@ defmodule SimpleBank.Account.Create do
         with changeset <- Account.changeset(params_with_number),
             :ok <- verify_account(params_with_number[:user_id], params_with_number[:type]),
             {:ok, %Account{} = account} <- Repo.insert(changeset),
-            account_with_transactions = Repo.preload(account, [:user, :transactions_sent, :transactions_received]) do
-          {:ok, account_with_transactions}
+            account = Repo.preload(account, [:user, :transactions_sent, :transactions_received]) do
+          {:ok, account}
         else
           {:error, %Error{}} = error -> error
           {:error, result} -> {:error, Error.build(:bad_request, result)}
@@ -63,13 +63,13 @@ defmodule SimpleBank.Account.Create do
   # Está função ira verificar se o usuário possui ou não uma conta do mesmo tipo que ele está tentando criar
   defp verify_account(user_id, type) when is_binary(user_id) do
     query = case type do
-      "chain" ->
+      :chain ->
         from a in Account,
         where: a.user_id == ^user_id and (a.type == :chain or a.type == :wage)
-      "wage" ->
+      :wage ->
         from a in Account,
         where: a.user_id == ^user_id and (a.type == :chain or a.type == :wage)
-      "savings" ->
+      :savings ->
         from a in Account,
         where: a.user_id == ^user_id and a.type == :savings
       _ ->

@@ -27,7 +27,7 @@ defmodule SimpleBank.Transaction.Create do
   def call(%{} = params) do
     type = Map.get(params, :type)
     account_number = Map.get(params, :account_number)
-    recipient_number = Map.get(params, :recipient_number)
+    recipient_number = Map.get(params, :recipient_number, 0)
     amount = Map.get(params, :amount, Decimal.new("0"))
 
     number = create_transaction_number(type)
@@ -49,23 +49,25 @@ defmodule SimpleBank.Transaction.Create do
   defp create_transaction(:transfer, account, recipient_number, amount, number) do
     with {:ok} <- verify_balance(account.balance, amount),
          {:ok, %Account{} = recipient} <- get_account(recipient_number),
+         :ok <- ensure_different_accounts(account, recipient),
          multi <- build_transfer(account, recipient, :transfer, amount, number),
          {:ok, transaction} <- Repo.transaction(multi) do
       {:ok, transaction.inserted_transaction}
     else
       {:error, %Error{} = error} ->
         handle_error_transaction(error, account, :transfer, amount, number)
-      {:error, _failed_operation, failed_value, _changes_so_far} ->
-        {:error, Error.build(:internal_server_error, failed_value)}
+        {:error, _failed_operation, failed_value, _changes_so_far} ->
+        {:error, Error.build(:internal_server_error, failed_value.result)}
     end
   end
 
   defp create_transaction(:deposit, account, _recipient_number, amount, number) do
-    multi = build_deposit(account, :deposit, amount, number)
-    case Repo.transaction(multi) do
-      {:ok, transaction} -> {:ok, transaction.inserted_transaction}
+    with multi <- build_deposit(account, :deposit, amount, number),
+        {:ok, transaction} <- Repo.transaction(multi) do
+      {:ok, transaction.inserted_transaction}
+    else
+      {:error, _failed_operation, failed_value, _changes_so_far} -> {:error, Error.build(:internal_server_error, failed_value.result)}
       {:error, %Error{} = error} -> handle_error_transaction(error, account, :deposit, amount, number)
-      {:error, _failed_operation, failed_value, _changes_so_far} -> {:error, Error.build(:internal_server_error, failed_value)}
     end
   end
 
@@ -76,9 +78,12 @@ defmodule SimpleBank.Transaction.Create do
       {:ok, transaction.inserted_transaction}
     else
       {:error, %Error{} = error} -> handle_error_transaction(error, account, :withdraw, amount, number)
-      {:error, _failed_operation, failed_value, _changes_so_far} -> {:error, Error.build(:internal_server_error, failed_value)}
+      {:error, _failed_operation, failed_value, _changes_so_far} -> {:error, Error.build(:internal_server_error, failed_value.result)}
     end
   end
+
+  defp ensure_different_accounts(%Account{id: id1}, %Account{id: id2}) when id1 != id2, do: :ok
+  defp ensure_different_accounts(_, _), do: {:error, Error.build(:bad_request, "Sender and recipient accounts must be different")}
 
   # criação do build para o Ecto.Multi
   defp build_transfer(account, recipient_account, type, amount, number) do
@@ -126,7 +131,8 @@ defmodule SimpleBank.Transaction.Create do
     }
 
     with changeset <- Transaction.changeset(transaction_params),
-         {:ok, transaction} <- Repo.insert(changeset) do
+         {:ok, transaction} <- Repo.insert(changeset),
+         transaction = Repo.preload(transaction, [recipient: :user]) do
       {:ok, transaction}
     else
       {:error, result} -> {:error, Error.build(:bad_request, result)}

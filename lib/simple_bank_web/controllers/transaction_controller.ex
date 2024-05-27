@@ -8,6 +8,15 @@ defmodule SimpleBankWeb.TransactionController do
 
 
   def create(conn, params) do
+    params =
+      params
+      |> Enum.map(fn {k, v} ->
+        key = String.to_atom(k)
+        value = if key == :type, do: String.to_existing_atom(v), else: v
+        {key, value}
+      end)
+      |> Enum.into(%{})
+
     with {:ok, %Transaction{} = transaction} <- SimpleBank.create_transaction(params) do
       conn
       |> put_status(:created)

@@ -49,7 +49,14 @@ defmodule SimpleBankWeb.AccountController do
   end
 
   def create(conn, params) do
-    params = Map.new(params, fn {k, v} -> {String.to_existing_atom(k), v} end)
+    params =
+      params
+      |> Enum.map(fn {k, v} ->
+        key = String.to_atom(k)
+        value = if key == :type, do: String.to_existing_atom(v), else: v
+        {key, value}
+      end)
+      |> Enum.into(%{})
 
     with {:ok, %Account{} = account} <- SimpleBank.create_account(params) do
       conn
@@ -59,7 +66,14 @@ defmodule SimpleBankWeb.AccountController do
   end
 
   def update(conn, params) do
-    params = Map.new(params, fn {k, v} -> {String.to_existing_atom(k), v} end)
+    params =
+      params
+      |> Enum.map(fn {k, v} ->
+        key = String.to_atom(k)
+        value = if key == :type, do: String.to_existing_atom(v), else: v
+        {key, value}
+      end)
+      |> Enum.into(%{})
 
     with {:ok, %Account{} = account} <- SimpleBank.update_account(params) do
       conn

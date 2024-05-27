@@ -47,13 +47,13 @@ defmodule SimpleBank.Account.Update do
 
   defp verify_account(user_id, type, account_id) do
     query = case type do
-      "chain" ->
+      :chain ->
         from a in Account,
         where: a.user_id == ^user_id and a.id != ^account_id and (a.type == :chain or a.type == :wage)
-      "wage" ->
+      :wage ->
         from a in Account,
         where: a.user_id == ^user_id and a.id != ^account_id and (a.type == :chain or a.type == :wage)
-      "savings" ->
+      :savings ->
         from a in Account,
         where: a.user_id == ^user_id and a.id != ^account_id and a.type == :savings
       _ ->
