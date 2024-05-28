@@ -9,7 +9,8 @@ defmodule SimpleBank.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      compilers: Mix.compilers ++ [:phoenix_swagger],
     ]
   end
 
@@ -19,7 +20,7 @@ defmodule SimpleBank.MixProject do
   def application do
     [
       mod: {SimpleBank.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      # extra_applications: [:logger, :runtime_tools]
     ]
   end
 
@@ -46,6 +47,8 @@ defmodule SimpleBank.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
       {:dotenv, "~> 3.1.0"},
+      {:phoenix_swagger, "~> 0.8"},
+      {:ex_json_schema, "~> 0.5"}
     ]
   end
 

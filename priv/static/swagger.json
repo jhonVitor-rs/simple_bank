@@ -1,0 +1,292 @@
+{
+  "info": {
+    "version": "1.0",
+    "description": "API Documentation for Simple Bank v1, developed to simulate simple bank transactions.",
+    "title": "Simple Bank",
+    "termsOfService": "Open for public",
+    "contact": {
+      "name": "João Vitor Rankel Siben",
+      "email": "joaovitor.jvrs6@gmail.com"
+    }
+  },
+  "host": "localhost:4000",
+  "definitions": {},
+  "tags": [
+    {
+      "name": "Users",
+      "description": "User resources"
+    },
+    {
+      "name": "Accounts",
+      "description": "Accounts resources"
+    },
+    {
+      "name": "Transactions",
+      "description": "Trasactions routes"
+    }
+  ],
+  "paths": {
+    "/api/users": {
+      "get": {
+        "description": "List all users in the database",
+        "operationId": "SimpleBankWeb.UserController.index",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "summary": "List all users",
+        "tags": [
+          "Users"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Creates a new user in the database",
+        "operationId": "SimpleBankWeb.UserController.create",
+        "parameters": [
+          {
+            "description": "User data",
+            "in": "body",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "properties": {
+                "address": {
+                  "type": "string"
+                },
+                "birth": {
+                  "format": "date",
+                  "type": "string"
+                },
+                "cep": {
+                  "type": "string"
+                },
+                "cpf": {
+                  "type": "string"
+                },
+                "first_name": {
+                  "type": "string"
+                },
+                "last_name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "first_name",
+                "last_name",
+                "cpf",
+                "birth",
+                "address",
+                "cep"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "summary": "Create a new user",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/name/{name}": {
+      "get": {
+        "description": "Get users that match the search by name",
+        "operationId": "SimpleBankWeb.UserController.show_by_name",
+        "parameters": [
+          {
+            "description": "User name",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "summary": "Get users by name",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/{id}": {
+      "delete": {
+        "description": "Deletes an existing user from the system",
+        "operationId": "SimpleBankWeb.UserController.delete",
+        "parameters": [
+          {
+            "description": "User ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "summary": "Delete a user",
+        "tags": [
+          "Users"
+        ]
+      },
+      "get": {
+        "description": "Get a specified user by their ID",
+        "operationId": "SimpleBankWeb.UserController.show",
+        "parameters": [
+          {
+            "description": "User ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "binary"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "summary": "Get a user by ID",
+        "tags": [
+          "Users"
+        ]
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Update a existing user in the database",
+        "operationId": "SimpleBankWeb.UserController.update",
+        "parameters": [
+          {
+            "description": "User data",
+            "in": "body",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "properties": {
+                "address": {
+                  "type": "string"
+                },
+                "birth": {
+                  "format": "date",
+                  "type": "string"
+                },
+                "cep": {
+                  "type": "string"
+                },
+                "cpf": {
+                  "type": "string"
+                },
+                "first_name": {
+                  "type": "string"
+                },
+                "last_name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "first_name",
+                "last_name",
+                "cpf",
+                "birth",
+                "address",
+                "cep"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "summary": "Update a existing user",
+        "tags": [
+          "Users"
+        ]
+      }
+    }
+  },
+  "swagger": "2.0",
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ]
+}

@@ -35,6 +35,16 @@ config :simple_bank, SimpleBankWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :simple_bank, SimpleBank.Mailer, adapter: Swoosh.Adapters.Local
 
+config :simple_bank, :phoenix_swagger,
+  swagger_files: %{
+    "priv/static/swagger.json" => [
+      router: SimpleBankWeb.Router,   # phoenix routes will be converted to swagger paths
+      endpoint: SimpleBankWeb.Endpoint  # (optional) endpoint config used to set host, port and https schemes.
+    ]
+  }
+
+config :phoenix_swagger, json_library: Jason
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

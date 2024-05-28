@@ -19,6 +19,32 @@ defmodule SimpleBankWeb.Router do
     resources "/transactions", TransactionController, only: [:show, :create]
   end
 
+  scope "/api/swagger" do
+    forward("/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :simple_bank, swagger_file: "swagger.json")
+  end
+
+  def swagger_info do
+    %{
+      info: %{
+        version: "1.0",
+        title: "Simple Bank",
+        description: "API Documentation for Simple Bank v1, developed to simulate simple bank transactions.",
+        termsOfService: "Open for public",
+        contact: %{
+          name: "João Vitor Rankel Siben",
+          email: "joaovitor.jvrs6@gmail.com"
+        }
+      },
+      consumes: ["application/json"],
+      produces: ["application/json"],
+      tags: [
+        %{name: "Users", description: "User resources"},
+        %{name: "Accounts", description: "Accounts resources"},
+        %{name: "Transactions", description: "Trasactions routes"}
+      ]
+    }
+  end
+
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:simple_bank, :dev_routes) do
     # If you want to use the LiveDashboard in production, you should put
