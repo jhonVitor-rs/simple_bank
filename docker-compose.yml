@@ -2,20 +2,27 @@ version: '3.8'
 
 services:
   # app:
-    # Nome da imagem definida no Dockerfile
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile
-    # # Mapeamento da porta da aplicação Phoenix
-    # ports:
-    #   - "4000:4000"
-    # Dependência de banco de dados, se necessário
-    # depends_on:
-    #   - db
-    # Link com o serviço do banco de dados, se necessário
-    # links:
-    #   - db
-    # Definição do serviço do banco de dados, se necessário
+  #   # Nome da imagem definida no Dockerfile
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   # Mapeamento da porta da aplicação Phoenix
+  #   ports:
+  #     - "4000:4000"
+  #   # Dependência de banco de dados, se necessário
+  #   depends_on:
+  #     - db
+  #   # Link com o serviço do banco de dados, se necessário
+  #   links:
+  #     - db
+  #   environment:
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=postgres
+  #     - POSTGRES_DB=simple_bank_dev
+  #     - POSTGRES_DB_TEST=simple_bank_test
+  #     - HOSTNAME=db
+
+  # Definição do serviço do banco de dados, se necessário
   db:
     image: postgres:16-alpine3.19
     ports:

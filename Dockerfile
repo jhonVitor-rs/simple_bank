@@ -22,6 +22,12 @@ RUN mix local.hex --force && \
 # Compilação do projeto
 RUN mix compile
 
+# Instalação das dependências de teste
+RUN mix deps.get --only tests
+
+# Execução dos testes
+RUN mix test
+
 # Execução das migrações do banco de dados
 RUN mix ecto.setup
 
