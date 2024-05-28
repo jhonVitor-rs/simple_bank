@@ -2,10 +2,10 @@ import Config
 
 # Configure your database
 config :simple_bank, SimpleBank.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "simple_bank_dev",
+  username: System.fetch_env!("POSTGRES_USER"),
+  password: System.get_env("POSTGRES_PASSWORD"),
+  database: System.get_env("POSTGRES_DB"),
+  hostname: System.get_env("HOSTNAME"),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

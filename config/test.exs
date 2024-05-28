@@ -6,10 +6,10 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :simple_bank, SimpleBank.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "simple_bank_test",
+  username: System.get_env("POSTGRES_USER"),
+  password: System.get_env("POSTGRES_PASSWORD"),
+  database: System.get_env("POSTGRES_DB_TEST"),
+  hostname: System.get_env("HOSTNAME"),
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2
 
