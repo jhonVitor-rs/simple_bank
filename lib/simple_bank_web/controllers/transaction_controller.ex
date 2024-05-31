@@ -1,12 +1,90 @@
 defmodule SimpleBankWeb.TransactionController do
   use SimpleBankWeb, :controller
+  use PhoenixSwagger
 
   alias SimpleBankWeb.FallbackController
   alias SimpleBank.Transaction
 
   action_fallback FallbackController
 
+  def swagger_definitions do
+    %{
+      TransactionRequest:
+        swagger_schema do
+          title "Transaction Request"
+          description "POST body for cratong a transaction"
+          type :object
 
+          properties do
+            type :string, "Type", required: true, enum: ["transfer", "deposit", "withdraw"]
+            amount :string, "Amount", format: "decimal", required: true
+            account_number :integer, "Account Number", required: true
+            recipient_number :integer, "Recipient Number", required: false
+          end
+        end,
+      TransactionResponse:
+        swagger_schema do
+          title "Transaction Response"
+          description "Response schema for a single transaction"
+          type :object
+
+          properties do
+            id :string, "Transaction ID", required: true
+            number :ineger, "Number", required: true
+            amount :string, "Amount", required: true
+            type :string, "Type", required: true
+            status :string, "Status", required: true
+            account(Schema.new do
+              properties do
+                id :string, "Account ID", required: true
+                number :integer, "Account Number", required: true
+                type :string, "Account Type", required: true
+                user(Schema.new do
+                  properties do
+                    id :string, "User ID", required: true
+                    first_name :string, "User First Name", required: true
+                    last_name :string, "User Last Name", required: true
+                    cpf :string, "User CPF", required: true
+                  end
+                end)
+              end
+            end)
+            recipient(Schema.new do
+              properties do
+                id :string, "Recipient ID", required: true
+                number :integer, "Recipient Number", required: true
+                type :string, "Recipient Type", required: true
+                user(Schema.new do
+                  properties do
+                    id :string, "User ID", required: true
+                    first_name :string, "User First Name", required: true
+                    last_name :string, "User Last Name", required: true
+                    cpf :string, "User CPF", required: true
+                  end
+                end)
+              end
+            end)
+            inserted_at :string, "Insertion date", format: "date_time"
+            updated_at :string, "Update date", format: "date-time"
+          end
+        end
+    }
+  end
+
+  swagger_path :create do
+    post "/api/transactions"
+    summary "Creaye a new transaction"
+    description "Creates a new transaction in the database"
+    produces "application/json"
+    tag "Transactions"
+    consumes "application/json"
+
+    parameter :transaction, :body, Schema.ref(:TransactionRequest), "Transaction data", required: true
+
+    response 200, "OK", Schema.ref(:TransactionResponse)
+    response 400, "Bad Request"
+    response 500, "Internal Server Error"
+  end
   def create(conn, params) do
     params =
       params
@@ -24,6 +102,17 @@ defmodule SimpleBankWeb.TransactionController do
     end
   end
 
+  swagger_path :show do
+    get "/api/transactions/{id}"
+    summary "Get a transaction by ID"
+    description "Get a specified transaction by their ID"
+    produces "application/json"
+    tag "Transactions"
+    parameter :id, :path, :binary, "Transaction ID", required: true
+    response 200, "OK", Schema.ref(:TransactionResponse)
+    response 400, "Bad Request"
+    response 404, "Not Found"
+  end
   def show(conn, %{"id" => id}) do
     with {:ok, %Transaction{} = transaction} <- SimpleBank.get_transaction_by_id(id) do
       conn

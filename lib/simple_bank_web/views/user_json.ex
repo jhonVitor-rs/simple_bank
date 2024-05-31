@@ -11,6 +11,7 @@ defmodule SimpleBankWeb.UserJSON do
       cpf: user.cpf,
       accounts: for account <- user.accounts do
         %{
+          id: account.id,
           number: account.number,
           type: account.type
         }

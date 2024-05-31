@@ -3,29 +3,941 @@
     "version": "1.0",
     "description": "API Documentation for Simple Bank v1, developed to simulate simple bank transactions.",
     "title": "Simple Bank",
-    "termsOfService": "Open for public",
     "contact": {
       "name": "João Vitor Rankel Siben",
       "email": "joaovitor.jvrs6@gmail.com"
-    }
+    },
+    "termsOfService": "Open for public"
   },
   "host": "localhost:4000",
-  "definitions": {},
-  "tags": [
-    {
-      "name": "Users",
-      "description": "User resources"
+  "definitions": {
+    "UserRequest": {
+      "description": "POST body for creating a user",
+      "properties": {
+        "address": {
+          "description": "Address",
+          "type": "string"
+        },
+        "birth": {
+          "description": "Birth date",
+          "format": "date",
+          "type": "string"
+        },
+        "cep": {
+          "description": "CEP",
+          "type": "string"
+        },
+        "cpf": {
+          "description": "CPF",
+          "type": "string"
+        },
+        "first_name": {
+          "description": "Fist Name",
+          "type": "string"
+        },
+        "last_name": {
+          "description": "Last Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "cep",
+        "address",
+        "birth",
+        "cpf",
+        "last_name",
+        "first_name"
+      ],
+      "title": "User Request",
+      "type": "object"
     },
-    {
-      "name": "Accounts",
-      "description": "Accounts resources"
+    "UserResponse": {
+      "description": "Response schema for a single user",
+      "properties": {
+        "accounts": {
+          "description": {
+            "properties": {
+              "balance": {
+                "description": "Balance",
+                "format": "decimal",
+                "type": "string"
+              },
+              "id": {
+                "description": "Account ID",
+                "type": "string"
+              },
+              "inserted_at": {
+                "description": "Insertion date",
+                "format": "date_time",
+                "type": "string"
+              },
+              "number": {
+                "description": "Number",
+                "type": "integer"
+              },
+              "type": {
+                "description": "Type",
+                "type": "string"
+              },
+              "updated_at": {
+                "description": "Update date",
+                "format": "date-time",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "balance",
+              "number",
+              "id"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "address": {
+          "description": "Address",
+          "type": "string"
+        },
+        "birth": {
+          "description": "Birth date",
+          "format": "date",
+          "type": "string"
+        },
+        "cep": {
+          "description": "CEP",
+          "type": "string"
+        },
+        "cpf": {
+          "description": "CPF",
+          "type": "string"
+        },
+        "first_name": {
+          "description": "Fist Name",
+          "type": "string"
+        },
+        "id": {
+          "description": "User ID",
+          "type": "string"
+        },
+        "inserted_at": {
+          "description": "Insertion date",
+          "format": "date_time",
+          "type": "string"
+        },
+        "last_name": {
+          "description": "Last Name",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Update date",
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "cep",
+        "address",
+        "birth",
+        "cpf",
+        "last_name",
+        "first_name",
+        "id"
+      ],
+      "title": "User Response",
+      "type": "object"
     },
-    {
-      "name": "Transactions",
-      "description": "Trasactions routes"
+    "UsersResponse": {
+      "description": "Response schema for a many user",
+      "properties": {
+        "accounts": {
+          "description": {
+            "properties": {
+              "id": {
+                "description": "Account ID",
+                "type": "string"
+              },
+              "number": {
+                "description": "Number",
+                "type": "integer"
+              },
+              "type": {
+                "description": "Type",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "number",
+              "id"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "cpf": {
+          "description": "CPF",
+          "type": "string"
+        },
+        "first_name": {
+          "description": "Fist Name",
+          "type": "string"
+        },
+        "id": {
+          "description": "User ID",
+          "type": "string"
+        },
+        "last_name": {
+          "description": "Last Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "cpf",
+        "last_name",
+        "first_name",
+        "id"
+      ],
+      "title": "Users Response",
+      "type": "object"
+    },
+    "AccountUser": {
+      "description": "User schema that is returned along with the account search",
+      "properties": {
+        "cpf": {
+          "description": "CPF",
+          "type": "string"
+        },
+        "first_name": {
+          "description": "Fist Name",
+          "type": "string"
+        },
+        "id": {
+          "description": "User ID",
+          "type": "string"
+        },
+        "last_name": {
+          "description": "Last Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "cpf",
+        "last_name",
+        "first_name",
+        "id"
+      ],
+      "title": "User Account Response",
+      "type": "object"
+    },
+    "AccountTransactions": {
+      "description": "Transaction scheme that is returned along with the accounts",
+      "properties": {
+        "amount": {
+          "description": "Amount",
+          "format": "decimal",
+          "type": "string"
+        },
+        "id": {
+          "description": "Account ID",
+          "type": "string"
+        },
+        "inserted_at": {
+          "description": "Insertion date",
+          "format": "date_time",
+          "type": "string"
+        },
+        "number": {
+          "description": "Number",
+          "type": "integer"
+        },
+        "status": {
+          "description": "Status",
+          "type": "string"
+        },
+        "type": {
+          "description": "Type",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Update date",
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "type",
+        "amount",
+        "number",
+        "id"
+      ],
+      "title": "Transactions Account Response",
+      "type": "object"
+    },
+    "AccountRequest": {
+      "description": "POST body for creating a account",
+      "properties": {
+        "balance": {
+          "description": "Balance",
+          "format": "decimal",
+          "type": "string"
+        },
+        "type": {
+          "description": "Type",
+          "enum": [
+            "chain",
+            "wage",
+            "saving"
+          ],
+          "type": "string"
+        },
+        "user_id": {
+          "description": "User ID",
+          "type": "string"
+        }
+      },
+      "required": [
+        "user_id",
+        "type"
+      ],
+      "title": "Account Request",
+      "type": "object"
+    },
+    "AccountResponse": {
+      "description": "Response schema for a single account",
+      "properties": {
+        "balance": {
+          "description": "Balance",
+          "format": "decimal",
+          "type": "string"
+        },
+        "id": {
+          "description": "Account ID",
+          "type": "string"
+        },
+        "inserted_at": {
+          "description": "Insertion date",
+          "format": "date_time",
+          "type": "string"
+        },
+        "number": {
+          "description": "Number",
+          "type": "integer"
+        },
+        "transactions_received": {
+          "description": "Transactions Received",
+          "items": {
+            "items": {
+              "$ref": "#/definitions/AccountTransactions"
+            },
+            "type": "array"
+          },
+          "type": "array"
+        },
+        "transactions_sent": {
+          "description": "Transactions Sent",
+          "items": {
+            "items": {
+              "$ref": "#/definitions/AccountTransactions"
+            },
+            "type": "array"
+          },
+          "type": "array"
+        },
+        "type": {
+          "description": "Type",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Update date",
+          "format": "date-time",
+          "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/AccountUser",
+          "description": "User"
+        }
+      },
+      "required": [
+        "user",
+        "type",
+        "balance",
+        "number",
+        "id"
+      ],
+      "title": "Account Response",
+      "type": "object"
+    },
+    "AccountsResponse": {
+      "description": "Response schema for a many account",
+      "properties": {
+        "id": {
+          "description": "Account ID",
+          "type": "string"
+        },
+        "number": {
+          "description": "Number",
+          "type": "integer"
+        },
+        "type": {
+          "description": "Type",
+          "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/AccountUser",
+          "description": "User"
+        }
+      },
+      "required": [
+        "user",
+        "type",
+        "number",
+        "id"
+      ],
+      "title": "Accounts Response",
+      "type": "object"
+    },
+    "TransactionRequest": {
+      "description": "POST body for cratong a transaction",
+      "properties": {
+        "account_number": {
+          "description": "Account Number",
+          "type": "integer"
+        },
+        "amount": {
+          "description": "Amount",
+          "format": "decimal",
+          "type": "string"
+        },
+        "recipient_number": {
+          "description": "Recipient Number",
+          "type": "integer"
+        },
+        "type": {
+          "description": "Type",
+          "enum": [
+            "transfer",
+            "deposit",
+            "withdraw"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "account_number",
+        "amount",
+        "type"
+      ],
+      "title": "Transaction Request",
+      "type": "object"
+    },
+    "TransactionResponse": {
+      "description": "Response schema for a single transaction",
+      "properties": {
+        "account": {
+          "properties": {
+            "id": {
+              "description": "Account ID",
+              "type": "string"
+            },
+            "number": {
+              "description": "Account Number",
+              "type": "integer"
+            },
+            "type": {
+              "description": "Account Type",
+              "type": "string"
+            },
+            "user": {
+              "properties": {
+                "cpf": {
+                  "description": "User CPF",
+                  "type": "string"
+                },
+                "first_name": {
+                  "description": "User First Name",
+                  "type": "string"
+                },
+                "id": {
+                  "description": "User ID",
+                  "type": "string"
+                },
+                "last_name": {
+                  "description": "User Last Name",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "cpf",
+                "last_name",
+                "first_name",
+                "id"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "type",
+            "number",
+            "id"
+          ],
+          "type": "object"
+        },
+        "amount": {
+          "description": "Amount",
+          "type": "string"
+        },
+        "id": {
+          "description": "Transaction ID",
+          "type": "string"
+        },
+        "inserted_at": {
+          "description": "Insertion date",
+          "format": "date_time",
+          "type": "string"
+        },
+        "number": {
+          "description": "Number",
+          "type": "ineger"
+        },
+        "recipient": {
+          "properties": {
+            "id": {
+              "description": "Recipient ID",
+              "type": "string"
+            },
+            "number": {
+              "description": "Recipient Number",
+              "type": "integer"
+            },
+            "type": {
+              "description": "Recipient Type",
+              "type": "string"
+            },
+            "user": {
+              "properties": {
+                "cpf": {
+                  "description": "User CPF",
+                  "type": "string"
+                },
+                "first_name": {
+                  "description": "User First Name",
+                  "type": "string"
+                },
+                "id": {
+                  "description": "User ID",
+                  "type": "string"
+                },
+                "last_name": {
+                  "description": "User Last Name",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "cpf",
+                "last_name",
+                "first_name",
+                "id"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "type",
+            "number",
+            "id"
+          ],
+          "type": "object"
+        },
+        "status": {
+          "description": "Status",
+          "type": "string"
+        },
+        "type": {
+          "description": "Type",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Update date",
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "type",
+        "amount",
+        "number",
+        "id"
+      ],
+      "title": "Transaction Response",
+      "type": "object"
     }
-  ],
+  },
   "paths": {
+    "/api/accounts": {
+      "get": {
+        "description": "List all accounts in the database",
+        "operationId": "SimpleBankWeb.AccountController.index",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/AccountsResponse"
+              },
+              "type": "array"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "summary": "List all accounts",
+        "tags": [
+          "Accounts"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Creates a new account in the database",
+        "operationId": "SimpleBankWeb.AccountController.create",
+        "parameters": [
+          {
+            "description": "Account data",
+            "in": "body",
+            "name": "account",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AccountRequest"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AccountResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "summary": "Create a new account",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/api/accounts/number/{number}": {
+      "get": {
+        "description": "Get a specified account by their Number",
+        "operationId": "SimpleBankWeb.AccountController.show_by_number",
+        "parameters": [
+          {
+            "description": "Account Number",
+            "in": "path",
+            "name": "number",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AccountResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "summary": "Get a account by Number",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/api/accounts/type/{type}": {
+      "get": {
+        "description": "Get all accounts by a specified type",
+        "operationId": "SimpleBankWeb.AccountController.show_by_type",
+        "parameters": [
+          {
+            "description": "Account Type",
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/AccountsResponse"
+              },
+              "type": "array"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "summary": "Get accounts by type",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/api/accounts/user_id/{user_id}": {
+      "get": {
+        "description": "Get all accounts by a specified user ID",
+        "operationId": "SimpleBankWeb.AccountController.show_by_user_id",
+        "parameters": [
+          {
+            "description": "User ID",
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "type": "binary"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/AccountsResponse"
+              },
+              "type": "array"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "summary": "Get accounts by user ID",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/api/accounts/{id}": {
+      "delete": {
+        "description": "Deletes an existing account from the system",
+        "operationId": "SimpleBankWeb.AccountController.delete",
+        "parameters": [
+          {
+            "description": "Account ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "binary"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "summary": "Delete a account",
+        "tags": [
+          "Accounts"
+        ]
+      },
+      "get": {
+        "description": "Get a specified account by their ID",
+        "operationId": "SimpleBankWeb.AccountController.show",
+        "parameters": [
+          {
+            "description": "Account ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "binary"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AccountResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "summary": "Get a account by ID",
+        "tags": [
+          "Accounts"
+        ]
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Update a existing account in the database",
+        "operationId": "SimpleBankWeb.AccountController.update",
+        "parameters": [
+          {
+            "description": "Account ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "binary"
+          },
+          {
+            "description": "Account data",
+            "in": "body",
+            "name": "account",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/AccountRequest"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AccountResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "summary": "Update a existing account",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/api/transactions": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Creates a new transaction in the database",
+        "operationId": "SimpleBankWeb.TransactionController.create",
+        "parameters": [
+          {
+            "description": "Transaction data",
+            "in": "body",
+            "name": "transaction",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TransactionRequest"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TransactionResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "summary": "Creaye a new transaction",
+        "tags": [
+          "Transactions"
+        ]
+      }
+    },
+    "/api/transactions/{id}": {
+      "get": {
+        "description": "Get a specified transaction by their ID",
+        "operationId": "SimpleBankWeb.TransactionController.show",
+        "parameters": [
+          {
+            "description": "Transaction ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "binary"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TransactionResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "summary": "Get a transaction by ID",
+        "tags": [
+          "Transactions"
+        ]
+      }
+    },
     "/api/users": {
       "get": {
         "description": "List all users in the database",
@@ -38,7 +950,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/UsersResponse"
             }
           },
           "404": {
@@ -63,36 +975,7 @@
             "name": "user",
             "required": true,
             "schema": {
-              "properties": {
-                "address": {
-                  "type": "string"
-                },
-                "birth": {
-                  "format": "date",
-                  "type": "string"
-                },
-                "cep": {
-                  "type": "string"
-                },
-                "cpf": {
-                  "type": "string"
-                },
-                "first_name": {
-                  "type": "string"
-                },
-                "last_name": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "first_name",
-                "last_name",
-                "cpf",
-                "birth",
-                "address",
-                "cep"
-              ],
-              "type": "object"
+              "$ref": "#/definitions/UserRequest"
             }
           }
         ],
@@ -103,7 +986,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/UserResponse"
             }
           },
           "400": {
@@ -136,7 +1019,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/UsersResponse"
             }
           },
           "404": {
@@ -159,7 +1042,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "type": "integer"
+            "type": "binary"
           }
         ],
         "produces": [
@@ -197,7 +1080,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/UserResponse"
             }
           },
           "400": {
@@ -220,41 +1103,19 @@
         "operationId": "SimpleBankWeb.UserController.update",
         "parameters": [
           {
+            "description": "User ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "binary"
+          },
+          {
             "description": "User data",
             "in": "body",
             "name": "user",
-            "required": true,
+            "required": false,
             "schema": {
-              "properties": {
-                "address": {
-                  "type": "string"
-                },
-                "birth": {
-                  "format": "date",
-                  "type": "string"
-                },
-                "cep": {
-                  "type": "string"
-                },
-                "cpf": {
-                  "type": "string"
-                },
-                "first_name": {
-                  "type": "string"
-                },
-                "last_name": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "first_name",
-                "last_name",
-                "cpf",
-                "birth",
-                "address",
-                "cep"
-              ],
-              "type": "object"
+              "$ref": "#/definitions/UserRequest"
             }
           }
         ],
@@ -265,7 +1126,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/UserResponse"
             }
           },
           "400": {
@@ -288,5 +1149,19 @@
   ],
   "produces": [
     "application/json"
+  ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "User resources"
+    },
+    {
+      "name": "Accounts",
+      "description": "Accounts resources"
+    },
+    {
+      "name": "Transactions",
+      "description": "Trasactions routes"
+    }
   ]
 }

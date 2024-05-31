@@ -9,6 +9,7 @@ defmodule SimpleBankWeb.AccountJSON do
       number: account.number,
       type: account.type,
       user: %{
+        id: account.user.id,
         first_name: account.user.first_name,
         last_name: account.user.last_name,
         cpf: account.user.cpf
@@ -23,6 +24,7 @@ defmodule SimpleBankWeb.AccountJSON do
       balance: account.balance,
       type: account.type,
       user: %{
+        id: account.user.id,
         first_name: account.user.first_name,
         last_name: account.user.last_name,
         cpf: account.user.cpf
