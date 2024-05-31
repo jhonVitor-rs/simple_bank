@@ -29,43 +29,41 @@ defmodule SimpleBankWeb.TransactionController do
           type :object
 
           properties do
-            id :string, "Transaction ID", required: true
+            id :string, "Transaction ID", format: "binary", required: true
             number :ineger, "Number", required: true
             amount :string, "Amount", required: true
             type :string, "Type", required: true
             status :string, "Status", required: true
-            account(Schema.new do
-              properties do
-                id :string, "Account ID", required: true
-                number :integer, "Account Number", required: true
-                type :string, "Account Type", required: true
-                user(Schema.new do
-                  properties do
-                    id :string, "User ID", required: true
-                    first_name :string, "User First Name", required: true
-                    last_name :string, "User Last Name", required: true
-                    cpf :string, "User CPF", required: true
-                  end
-                end)
-              end
-            end)
-            recipient(Schema.new do
-              properties do
-                id :string, "Recipient ID", required: true
-                number :integer, "Recipient Number", required: true
-                type :string, "Recipient Type", required: true
-                user(Schema.new do
-                  properties do
-                    id :string, "User ID", required: true
-                    first_name :string, "User First Name", required: true
-                    last_name :string, "User Last Name", required: true
-                    cpf :string, "User CPF", required: true
-                  end
-                end)
-              end
-            end)
+            account(Schema.ref(:TransactionAccount), "Transaction Account", required: true)
+            recipient(Schema.ref(:TransactionAccount), "Transaction Account Received", required: true)
             inserted_at :string, "Insertion date", format: "date_time"
             updated_at :string, "Update date", format: "date-time"
+          end
+        end,
+      TransactionAccount:
+        swagger_schema do
+          title "Transaction Account"
+          description "Account scheme that is returned along with the transactions"
+          type :object
+
+          properties do
+            id :string, "Account ID", format: "binary", required: true
+            number :integer, "Account Number", required: true
+            type :string, "Account Type", required: true
+            user(Schema.ref(:TransactionAccountUser), "Account User", required: true)
+          end
+        end,
+      TransactionAccountUser:
+        swagger_schema do
+          title "Transaction Account Schema"
+          description "User schema returned along with accounts in transaction queries"
+          type :object
+
+          properties do
+            id :string, "User ID", required: true
+            first_name :string, "User First Name", required: true
+            last_name :string, "User Last Name", required: true
+            cpf :string, "User CPF", required: true
           end
         end
     }

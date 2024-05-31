@@ -28,7 +28,7 @@ defmodule SimpleBankWeb.AccountController do
           type :object
 
           properties do
-            id :string, "Account ID", required: true
+            id :string, "Account ID", format: "binary", required: true
             number :integer, "Number", required: true
             balance :string, "Balance", format: "decimal", required: true
             type :string, "Type", required: true
@@ -46,7 +46,7 @@ defmodule SimpleBankWeb.AccountController do
           type :object
 
           properties do
-            id :string, "Account ID", required: true
+            id :string, "Account ID", format: "binary", required: true
             number :integer, "Number", required: true
             amount :string, "Amount", format: "decimal", required: true
             type :string, "Type", required: true
@@ -62,7 +62,7 @@ defmodule SimpleBankWeb.AccountController do
           type :object
 
           properties do
-            id :string, "Account ID", required: true
+            id :string, "Account ID", format: "binary", required: true
             number :integer, "Number", required: true
             type :string, "Type", required: true
             user(Schema.ref(:AccountUser), "User", required: true)
@@ -75,7 +75,7 @@ defmodule SimpleBankWeb.AccountController do
           type :object
 
           properties do
-            id :string, "User ID", required: true
+            id :string, "User ID", format: "binary", required: true
             first_name :string, "Fist Name", required: true
             last_name :string, "Last Name", required: true
             cpf :string, "CPF", required: true
@@ -94,7 +94,7 @@ defmodule SimpleBankWeb.AccountController do
     response 404, "Not Found"
   end
   def index(conn, _params) do
-    with {:ok, [%Account{}] = accounts} <- SimpleBank.get_accounts() do
+    with {:ok, accounts} <- SimpleBank.get_accounts() do
       conn
       |> put_status(:ok)
       |> render("all_accounts.json", accounts: accounts)
@@ -107,7 +107,7 @@ defmodule SimpleBankWeb.AccountController do
     description "Get a specified account by their ID"
     produces "application/json"
     tag "Accounts"
-    parameter :id, :path, :binary, "Account ID", required: true
+    parameter :id, :path, :string, "Account ID", required: true
     response 200, "OK", Schema.ref(:AccountResponse)
     response 400, "Bad Request"
     response 404, "Not Found"
@@ -133,7 +133,7 @@ defmodule SimpleBankWeb.AccountController do
   def show_by_type(conn, %{"type" => type}) do
     type_atom = String.to_existing_atom(type)
 
-    with {:ok, [%Account{}] = accounts} <- SimpleBank.get_accounts_by_type(type_atom) do
+    with {:ok, accounts} <- SimpleBank.get_accounts_by_type(type_atom) do
       conn
       |> put_status(:ok)
       |> render("all_accounts.json", accounts: accounts)
@@ -165,13 +165,13 @@ defmodule SimpleBankWeb.AccountController do
     description "Get all accounts by a specified user ID"
     produces "application/json"
     tag "Accounts"
-    parameter :user_id, :path, :binary, "User ID", required: true
+    parameter :user_id, :path, :string, "User ID", required: true
     response 200, "OK", Schema.array(:AccountsResponse)
     response 400, "Bad Request"
     response 404, "Not Found"
   end
   def show_by_user_id(conn, %{"user_id" => user_id}) do
-    with {:ok, [%Account{}] = accounts} <- SimpleBank.get_accounts_by_user_id(user_id) do
+    with {:ok, accounts} <- SimpleBank.get_accounts_by_user_id(user_id) do
       conn
       |> put_status(:ok)
       |> render("all_accounts.json", accounts: accounts)
@@ -217,7 +217,7 @@ defmodule SimpleBankWeb.AccountController do
     consumes "application/json"
 
     parameters do
-      id :path, :binary, "Account ID", required: true
+      id :path, :string, "Account ID", required: true
 
       account :body, Schema.ref(:AccountRequest), "Account data"
     end
@@ -244,22 +244,22 @@ defmodule SimpleBankWeb.AccountController do
   end
 
   swagger_path :delete do
-    delete "/api/accounts/{id}"
+    PhoenixSwagger.Path.delete "/api/accounts/{id}"
     summary "Delete a account"
     description "Deletes an existing account from the system"
     produces "application/json"
     tag "Accounts"
 
-    parameter :id, :path, :binary, "Account ID", required: true
+    parameter :id, :path, :string, "Account ID", required: true
 
     response 204, "No Content"
     response 404, "Not Found"
   end
-  # def delete(conn, %{"id" => id}) do
-  #   with {:ok, %Account{}} <- SimpleBank.delete_account(id) do
-  #     conn
-  #     |> put_status(:no_content)
-  #     |> render("delete.json", message: "Account deleted with success!")
-  #   end
-  # end
+  def delete(conn, %{"id" => id}) do
+    with {:ok, %Account{}} <- SimpleBank.delete_account(id) do
+      conn
+      |> put_status(:no_content)
+      |> render("delete.json", message: "Account deleted with success!")
+    end
+  end
 end

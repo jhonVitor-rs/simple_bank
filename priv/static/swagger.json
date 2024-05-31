@@ -3,11 +3,11 @@
     "version": "1.0",
     "description": "API Documentation for Simple Bank v1, developed to simulate simple bank transactions.",
     "title": "Simple Bank",
+    "termsOfService": "Open for public",
     "contact": {
       "name": "João Vitor Rankel Siben",
       "email": "joaovitor.jvrs6@gmail.com"
-    },
-    "termsOfService": "Open for public"
+    }
   },
   "host": "localhost:4000",
   "definitions": {
@@ -55,43 +55,12 @@
       "description": "Response schema for a single user",
       "properties": {
         "accounts": {
-          "description": {
-            "properties": {
-              "balance": {
-                "description": "Balance",
-                "format": "decimal",
-                "type": "string"
-              },
-              "id": {
-                "description": "Account ID",
-                "type": "string"
-              },
-              "inserted_at": {
-                "description": "Insertion date",
-                "format": "date_time",
-                "type": "string"
-              },
-              "number": {
-                "description": "Number",
-                "type": "integer"
-              },
-              "type": {
-                "description": "Type",
-                "type": "string"
-              },
-              "updated_at": {
-                "description": "Update date",
-                "format": "date-time",
-                "type": "string"
-              }
+          "description": "User Account",
+          "items": {
+            "items": {
+              "$ref": "#/definitions/UserAccount"
             },
-            "required": [
-              "type",
-              "balance",
-              "number",
-              "id"
-            ],
-            "type": "object"
+            "type": "array"
           },
           "type": "array"
         },
@@ -118,6 +87,7 @@
         },
         "id": {
           "description": "User ID",
+          "format": "binary",
           "type": "string"
         },
         "inserted_at": {
@@ -147,31 +117,57 @@
       "title": "User Response",
       "type": "object"
     },
+    "UserAccount": {
+      "description": "Account schema that is returned along with the user",
+      "properties": {
+        "balance": {
+          "description": "Balance",
+          "format": "decimal",
+          "type": "string"
+        },
+        "id": {
+          "description": "Account ID",
+          "format": "binary",
+          "type": "string"
+        },
+        "inserted_at": {
+          "description": "Insertion date",
+          "format": "date_time",
+          "type": "string"
+        },
+        "number": {
+          "description": "Number",
+          "type": "integer"
+        },
+        "type": {
+          "description": "Type",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Update date",
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "balance",
+        "number",
+        "id"
+      ],
+      "title": "User Account",
+      "type": "object"
+    },
     "UsersResponse": {
       "description": "Response schema for a many user",
       "properties": {
         "accounts": {
-          "description": {
-            "properties": {
-              "id": {
-                "description": "Account ID",
-                "type": "string"
-              },
-              "number": {
-                "description": "Number",
-                "type": "integer"
-              },
-              "type": {
-                "description": "Type",
-                "type": "string"
-              }
+          "description": "Users Account",
+          "items": {
+            "items": {
+              "$ref": "#/definitions/UsersAccount"
             },
-            "required": [
-              "type",
-              "number",
-              "id"
-            ],
-            "type": "object"
+            "type": "array"
           },
           "type": "array"
         },
@@ -185,6 +181,7 @@
         },
         "id": {
           "description": "User ID",
+          "format": "binary",
           "type": "string"
         },
         "last_name": {
@@ -201,78 +198,29 @@
       "title": "Users Response",
       "type": "object"
     },
-    "AccountUser": {
-      "description": "User schema that is returned along with the account search",
+    "UsersAccount": {
+      "description": "Account schema that is returned along with the usera",
       "properties": {
-        "cpf": {
-          "description": "CPF",
-          "type": "string"
-        },
-        "first_name": {
-          "description": "Fist Name",
-          "type": "string"
-        },
-        "id": {
-          "description": "User ID",
-          "type": "string"
-        },
-        "last_name": {
-          "description": "Last Name",
-          "type": "string"
-        }
-      },
-      "required": [
-        "cpf",
-        "last_name",
-        "first_name",
-        "id"
-      ],
-      "title": "User Account Response",
-      "type": "object"
-    },
-    "AccountTransactions": {
-      "description": "Transaction scheme that is returned along with the accounts",
-      "properties": {
-        "amount": {
-          "description": "Amount",
-          "format": "decimal",
-          "type": "string"
-        },
         "id": {
           "description": "Account ID",
-          "type": "string"
-        },
-        "inserted_at": {
-          "description": "Insertion date",
-          "format": "date_time",
+          "format": "binary",
           "type": "string"
         },
         "number": {
           "description": "Number",
           "type": "integer"
         },
-        "status": {
-          "description": "Status",
-          "type": "string"
-        },
         "type": {
           "description": "Type",
-          "type": "string"
-        },
-        "updated_at": {
-          "description": "Update date",
-          "format": "date-time",
           "type": "string"
         }
       },
       "required": [
-        "status",
         "type",
-        "amount",
         "number",
         "id"
       ],
-      "title": "Transactions Account Response",
+      "title": "Usera Account",
       "type": "object"
     },
     "AccountRequest": {
@@ -314,6 +262,7 @@
         },
         "id": {
           "description": "Account ID",
+          "format": "binary",
           "type": "string"
         },
         "inserted_at": {
@@ -369,11 +318,88 @@
       "title": "Account Response",
       "type": "object"
     },
+    "AccountUser": {
+      "description": "User schema that is returned along with the account search",
+      "properties": {
+        "cpf": {
+          "description": "CPF",
+          "type": "string"
+        },
+        "first_name": {
+          "description": "Fist Name",
+          "type": "string"
+        },
+        "id": {
+          "description": "User ID",
+          "format": "binary",
+          "type": "string"
+        },
+        "last_name": {
+          "description": "Last Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "cpf",
+        "last_name",
+        "first_name",
+        "id"
+      ],
+      "title": "Account User",
+      "type": "object"
+    },
+    "AccountTransactions": {
+      "description": "Transaction scheme that is returned along with the accounts",
+      "properties": {
+        "amount": {
+          "description": "Amount",
+          "format": "decimal",
+          "type": "string"
+        },
+        "id": {
+          "description": "Account ID",
+          "format": "binary",
+          "type": "string"
+        },
+        "inserted_at": {
+          "description": "Insertion date",
+          "format": "date_time",
+          "type": "string"
+        },
+        "number": {
+          "description": "Number",
+          "type": "integer"
+        },
+        "status": {
+          "description": "Status",
+          "type": "string"
+        },
+        "type": {
+          "description": "Type",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Update date",
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "type",
+        "amount",
+        "number",
+        "id"
+      ],
+      "title": "Account Transactions",
+      "type": "object"
+    },
     "AccountsResponse": {
       "description": "Response schema for a many account",
       "properties": {
         "id": {
           "description": "Account ID",
+          "format": "binary",
           "type": "string"
         },
         "number": {
@@ -436,53 +462,8 @@
       "description": "Response schema for a single transaction",
       "properties": {
         "account": {
-          "properties": {
-            "id": {
-              "description": "Account ID",
-              "type": "string"
-            },
-            "number": {
-              "description": "Account Number",
-              "type": "integer"
-            },
-            "type": {
-              "description": "Account Type",
-              "type": "string"
-            },
-            "user": {
-              "properties": {
-                "cpf": {
-                  "description": "User CPF",
-                  "type": "string"
-                },
-                "first_name": {
-                  "description": "User First Name",
-                  "type": "string"
-                },
-                "id": {
-                  "description": "User ID",
-                  "type": "string"
-                },
-                "last_name": {
-                  "description": "User Last Name",
-                  "type": "string"
-                }
-              },
-              "required": [
-                "cpf",
-                "last_name",
-                "first_name",
-                "id"
-              ],
-              "type": "object"
-            }
-          },
-          "required": [
-            "type",
-            "number",
-            "id"
-          ],
-          "type": "object"
+          "$ref": "#/definitions/TransactionAccount",
+          "description": "Transaction Account"
         },
         "amount": {
           "description": "Amount",
@@ -490,6 +471,7 @@
         },
         "id": {
           "description": "Transaction ID",
+          "format": "binary",
           "type": "string"
         },
         "inserted_at": {
@@ -502,53 +484,8 @@
           "type": "ineger"
         },
         "recipient": {
-          "properties": {
-            "id": {
-              "description": "Recipient ID",
-              "type": "string"
-            },
-            "number": {
-              "description": "Recipient Number",
-              "type": "integer"
-            },
-            "type": {
-              "description": "Recipient Type",
-              "type": "string"
-            },
-            "user": {
-              "properties": {
-                "cpf": {
-                  "description": "User CPF",
-                  "type": "string"
-                },
-                "first_name": {
-                  "description": "User First Name",
-                  "type": "string"
-                },
-                "id": {
-                  "description": "User ID",
-                  "type": "string"
-                },
-                "last_name": {
-                  "description": "User Last Name",
-                  "type": "string"
-                }
-              },
-              "required": [
-                "cpf",
-                "last_name",
-                "first_name",
-                "id"
-              ],
-              "type": "object"
-            }
-          },
-          "required": [
-            "type",
-            "number",
-            "id"
-          ],
-          "type": "object"
+          "$ref": "#/definitions/TransactionAccount",
+          "description": "Transaction Account Received"
         },
         "status": {
           "description": "Status",
@@ -565,6 +502,8 @@
         }
       },
       "required": [
+        "recipient",
+        "account",
         "status",
         "type",
         "amount",
@@ -573,8 +512,87 @@
       ],
       "title": "Transaction Response",
       "type": "object"
+    },
+    "TransactionAccount": {
+      "description": "Account scheme that is returned along with the transactions",
+      "properties": {
+        "id": {
+          "description": "Account ID",
+          "format": "binary",
+          "type": "string"
+        },
+        "number": {
+          "description": "Account Number",
+          "type": "integer"
+        },
+        "type": {
+          "description": "Account Type",
+          "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/TransactionAccountUser",
+          "description": "Account User"
+        }
+      },
+      "required": [
+        "user",
+        "type",
+        "number",
+        "id"
+      ],
+      "title": "Transaction Account",
+      "type": "object"
+    },
+    "TransactionAccountUser": {
+      "description": "User schema returned along with accounts in transaction queries",
+      "properties": {
+        "cpf": {
+          "description": "User CPF",
+          "type": "string"
+        },
+        "first_name": {
+          "description": "User First Name",
+          "type": "string"
+        },
+        "id": {
+          "description": "User ID",
+          "type": "string"
+        },
+        "last_name": {
+          "description": "User Last Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "cpf",
+        "last_name",
+        "first_name",
+        "id"
+      ],
+      "title": "Transaction Account Schema",
+      "type": "object"
     }
   },
+  "tags": [
+    {
+      "name": "Users",
+      "description": "User resources"
+    },
+    {
+      "name": "Accounts",
+      "description": "Accounts resources"
+    },
+    {
+      "name": "Transactions",
+      "description": "Trasactions routes"
+    }
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
   "paths": {
     "/api/accounts": {
       "get": {
@@ -722,7 +740,7 @@
             "in": "path",
             "name": "user_id",
             "required": true,
-            "type": "binary"
+            "type": "string"
           }
         ],
         "produces": [
@@ -761,7 +779,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "type": "binary"
+            "type": "string"
           }
         ],
         "produces": [
@@ -789,7 +807,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "type": "binary"
+            "type": "string"
           }
         ],
         "produces": [
@@ -826,7 +844,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "type": "binary"
+            "type": "string"
           },
           {
             "description": "Account data",
@@ -1042,7 +1060,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "type": "binary"
+            "type": "string"
           }
         ],
         "produces": [
@@ -1070,7 +1088,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "type": "binary"
+            "type": "string"
           }
         ],
         "produces": [
@@ -1107,7 +1125,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "type": "binary"
+            "type": "string"
           },
           {
             "description": "User data",
@@ -1143,25 +1161,5 @@
       }
     }
   },
-  "swagger": "2.0",
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
-  "tags": [
-    {
-      "name": "Users",
-      "description": "User resources"
-    },
-    {
-      "name": "Accounts",
-      "description": "Accounts resources"
-    },
-    {
-      "name": "Transactions",
-      "description": "Trasactions routes"
-    }
-  ]
+  "swagger": "2.0"
 }

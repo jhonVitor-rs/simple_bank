@@ -31,7 +31,7 @@ defmodule SimpleBankWeb.UserController do
           type :object
 
           properties do
-            id :string, "User ID", required: true
+            id :string, "User ID", format: "binary", required: true
             first_name :string, "Fist Name", required: true
             last_name :string, "Last Name", required: true
             cpf :string, "CPF", required: true
@@ -40,7 +40,7 @@ defmodule SimpleBankWeb.UserController do
             cep :string, "CEP", required: true
             inserted_at :string, "Insertion date", format: "date_time"
             updated_at :string, "Update date", format: "date-time"
-            accounts(:array, "User Account", Schema.array(:UserAccount))
+            accounts(:array, "User Account", items: Schema.array(:UserAccount))
           end
         end,
       UserAccount:
@@ -50,15 +50,14 @@ defmodule SimpleBankWeb.UserController do
           type :object
 
           properties do
-            id :string, "Account ID", required: true
+            id :string, "Account ID", format: "binary", required: true
             number :integer, "Number", required: true
             balance :string, "Balance", format: "decimal", required: true
             type :string, "Type", required: true
             inserted_at :string, "Insertion date", format: "date_time"
             updated_at :string, "Update date", format: "date-time"
           end
-        end
-      ,
+        end,
       UsersResponse:
         swagger_schema do
           title "Users Response"
@@ -66,11 +65,11 @@ defmodule SimpleBankWeb.UserController do
           type :object
 
           properties do
-            id :string, "User ID", required: true
+            id :string, "User ID", format: "binary", required: true
             first_name :string, "Fist Name", required: true
             last_name :string, "Last Name", required: true
             cpf :string, "CPF", required: true
-            accounts(:array, "Users Account", Schema.array(:UsersAccount))
+            accounts(:array, "Users Account", items: Schema.array(:UsersAccount))
           end
         end,
       UsersAccount:
@@ -80,7 +79,7 @@ defmodule SimpleBankWeb.UserController do
           type :object
 
           properties do
-            id :string, "Account ID", required: true
+            id :string, "Account ID", format: "binary", required: true
             number :integer, "Number", required: true
             type :string, "Type", required: true
           end
@@ -111,7 +110,7 @@ defmodule SimpleBankWeb.UserController do
     description "Get a specified user by their ID"
     produces "application/json"
     tag "Users"
-    parameter :id, :path, :binary, "User ID", required: true
+    parameter :id, :path, :string, "User ID", required: true
     response 200, "OK", Schema.ref(:UserResponse)
     response 400, "Bad Request"
     response 404, "Not Found"
@@ -181,7 +180,7 @@ defmodule SimpleBankWeb.UserController do
     consumes "application/json"
 
     parameters do
-      id :path, :binary, "User ID", required: true
+      id :path, :string, "User ID", required: true
 
       user :body, Schema.ref(:UserRequest), "User data"
     end
@@ -208,22 +207,22 @@ defmodule SimpleBankWeb.UserController do
   end
 
   swagger_path :delete do
-    delete "/api/users/{id}"
+    PhoenixSwagger.Path.delete "/api/users/{id}"
     summary "Delete a user"
     description "Deletes an existing user from the system"
     produces "application/json"
     tag "Users"
 
-    parameter :id, :path, :binary, "User ID", required: true
+    parameter :id, :path, :string, "User ID", required: true
 
     response 204, "No Content"
     response 404, "Not Found"
   end
-  # def delete(conn, %{"id" => id}) do
-  #   with {:ok, %User{}} <- SimpleBank.delete_user(id) do
-  #     conn
-  #     |> put_status(:no_content)
-  #     |> render("delete.json", message: "User deleted with success!")
-  #   end
-  # end
+  def delete(conn, %{"id" => id}) do
+    with {:ok, %User{}} <- SimpleBank.delete_user(id) do
+      conn
+      |> put_status(:no_content)
+      |> render("delete.json", message: "User deleted with success!")
+    end
+  end
 end

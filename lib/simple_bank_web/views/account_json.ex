@@ -3,7 +3,7 @@ defmodule SimpleBankWeb.AccountJSON do
 
   alias SimpleBank.Account
 
-  def render("all_accounts.json", %{accounts: [%Account{}] = accounts}) do
+  def render("all_accounts.json", %{accounts: accounts}) do
     %{data: for(account <- accounts, do: %{
       id: account.id,
       number: account.number,

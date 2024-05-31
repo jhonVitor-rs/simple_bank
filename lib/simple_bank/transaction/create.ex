@@ -132,7 +132,7 @@ defmodule SimpleBank.Transaction.Create do
 
     with changeset <- Transaction.changeset(transaction_params),
          {:ok, transaction} <- Repo.insert(changeset),
-         transaction = Repo.preload(transaction, [recipient: :user]) do
+         transaction = Repo.preload(transaction, [account: :user, recipient: :user]) do
       {:ok, transaction}
     else
       {:error, result} -> {:error, Error.build(:bad_request, result)}

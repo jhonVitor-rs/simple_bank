@@ -3,7 +3,7 @@ defmodule SimpleBankWeb.UserJSON do
 
   alias SimpleBank.User
 
-  def render("all_users.json", %{users: [%User{}] = users}) do
+  def render("all_users.json", %{users: users}) do
     %{data: for(user <- users, do: %{
       id: user.id,
       first_name: user.first_name,

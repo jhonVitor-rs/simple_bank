@@ -1,8 +1,8 @@
 # priv/repo/seeds.exs
 
-alias SimpleBank.{Repo, Account, Transaction, User}
+alias SimpleBank.{Account, Transaction, User}
 
-user1 = %User{
+user1 = %{
   first_name: "John",
   last_name: "Doe",
   cpf: "11122233344",
@@ -11,7 +11,7 @@ user1 = %User{
   cep: "80000000"
 }
 
-user2 = %User{
+user2 = %{
   first_name: "Antony",
   last_name: "Stark",
   cpf: "55566677788",
@@ -20,7 +20,7 @@ user2 = %User{
   cep: "80000000"
 }
 
-user3 = %User{
+user3 = %{
   first_name: "Steve",
   last_name: "Rogers",
   cpf: "99988877766",
@@ -34,13 +34,13 @@ user3 = %User{
 {:ok, %User{} = steve} = User.Create.call(user3)
 
 {:ok, %Account{} = chain_john} = Account.Create.call(%{type: :chain, user_id: john.id, balance: Decimal.new("50")})
-{:ok, %Account{} = savings_john} = Account.Create.call(%{type: :savings, user_id: john.id, balance: Decimal.new("50")})
+{:ok, %Account{} = _savings_john} = Account.Create.call(%{type: :savings, user_id: john.id, balance: Decimal.new("50")})
 
 {:ok, %Account{} = savings_antony} = Account.Create.call(%{type: :savings, user_id: antony.id, balance: Decimal.new("50")})
 {:ok, %Account{} = wage_antony} = Account.Create.call(%{type: :wage, user_id: antony.id, balance: Decimal.new("50")})
 
 {:ok, %Account{} = chain_steve} = Account.Create.call(%{type: :chain, user_id: steve.id, balance: Decimal.new("50")})
-{:ok, %Account{} = savings_steve} = Account.Create.call(%{type: :savings, user_id: steve.id, balance: Decimal.new("50")})
+{:ok, %Account{} = _savings_steve} = Account.Create.call(%{type: :savings, user_id: steve.id, balance: Decimal.new("50")})
 
 {:ok, _} = Transaction.Create.call(%{
   type: :transfer,
@@ -58,31 +58,31 @@ user3 = %User{
 
 {:ok, _} = Transaction.Create.call(%{
   type: :deposit,
-  amount: Decimal.new("50"),
+  amount: Decimal.new("50.00"),
   account_number: chain_john.number
 })
 
 {:ok, _} = Transaction.Create.call(%{
   type: :deposit,
-  amount: Decimal.new("50"),
+  amount: Decimal.new("50.00"),
   account_number: savings_antony.number
 })
 
 {:ok, _} = Transaction.Create.call(%{
   type: :withdraw,
-  amount: Decimal.new("10"),
+  amount: Decimal.new("10.00"),
   account_number: chain_john.number
 })
 
 {:ok, _} = Transaction.Create.call(%{
   type: :withdraw,
-  amount: Decimal.new("10"),
+  amount: Decimal.new("10.00"),
   account_number: savings_antony.number
 })
 
 {:ok, _} = Transaction.Create.call(%{
   type: :withdraw,
-  amount: Decimal.new("10"),
+  amount: Decimal.new("10.00"),
   account_number: wage_antony.number
 })
 
