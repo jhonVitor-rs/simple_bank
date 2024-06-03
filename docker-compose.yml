@@ -1,39 +1,41 @@
 version: '3.8'
 
 services:
-  # app:
-  #   # Nome da imagem definida no Dockerfile
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   # Mapeamento da porta da aplicação Phoenix
-  #   ports:
-  #     - "4000:4000"
-  #   # Dependência de banco de dados, se necessário
-  #   depends_on:
-  #     - db
-  #   # Link com o serviço do banco de dados, se necessário
-  #   links:
-  #     - db
-  #   environment:
-  #     - POSTGRES_USER=postgres
-  #     - POSTGRES_PASSWORD=postgres
-  #     - POSTGRES_DB=simple_bank_dev
-  #     - POSTGRES_DB_TEST=simple_bank_test
-  #     - HOSTNAME=db
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=simple_bank_dev
+        - POSTGRES_DB_TEST=simple_bank_test
+        - HOSTNAME=db
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=simple_bank_dev
+      - POSTGRES_DB_TEST=simple_bank_test
+      - HOSTNAME=db
+      - DATABASE_URL=ecto://postgres:postgres@db/simple_bank_dev
+    volumes:
+      - .:/app
 
-  # Definição do serviço do banco de dados, se necessário
   db:
     image: postgres:16-alpine3.19
     ports:
-      - 5432:5432
+      - "5432:5432"
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      - postgres_volume:/var/lib/postgressql/data
+      - postgres_volume:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: simple_bank_dev
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=simple_bank_dev
 
 volumes:
- postgres_volume:
+  postgres_volume:

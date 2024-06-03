@@ -11,154 +11,6 @@
   },
   "host": "localhost:4000",
   "definitions": {
-    "TransactionRequest": {
-      "description": "POST body for cratong a transaction",
-      "properties": {
-        "account_number": {
-          "description": "Account Number",
-          "type": "integer"
-        },
-        "amount": {
-          "description": "Amount",
-          "format": "decimal",
-          "type": "string"
-        },
-        "recipient_number": {
-          "description": "Recipient Number",
-          "type": "integer"
-        },
-        "type": {
-          "description": "Type",
-          "enum": [
-            "transfer",
-            "deposit",
-            "withdraw"
-          ],
-          "type": "string"
-        }
-      },
-      "required": [
-        "account_number",
-        "amount",
-        "type"
-      ],
-      "title": "Transaction Request",
-      "type": "object"
-    },
-    "TransactionResponse": {
-      "description": "Response schema for a single transaction",
-      "properties": {
-        "account": {
-          "$ref": "#/definitions/TransactionAccount",
-          "description": "Transaction Account"
-        },
-        "amount": {
-          "description": "Amount",
-          "type": "string"
-        },
-        "id": {
-          "description": "Transaction ID",
-          "format": "binary",
-          "type": "string"
-        },
-        "inserted_at": {
-          "description": "Insertion date",
-          "format": "date_time",
-          "type": "string"
-        },
-        "number": {
-          "description": "Number",
-          "type": "ineger"
-        },
-        "recipient": {
-          "$ref": "#/definitions/TransactionAccount",
-          "description": "Transaction Account Received"
-        },
-        "status": {
-          "description": "Status",
-          "type": "string"
-        },
-        "type": {
-          "description": "Type",
-          "type": "string"
-        },
-        "updated_at": {
-          "description": "Update date",
-          "format": "date-time",
-          "type": "string"
-        }
-      },
-      "required": [
-        "recipient",
-        "account",
-        "status",
-        "type",
-        "amount",
-        "number",
-        "id"
-      ],
-      "title": "Transaction Response",
-      "type": "object"
-    },
-    "TransactionAccount": {
-      "description": "Account scheme that is returned along with the transactions",
-      "properties": {
-        "id": {
-          "description": "Account ID",
-          "format": "binary",
-          "type": "string"
-        },
-        "number": {
-          "description": "Account Number",
-          "type": "integer"
-        },
-        "type": {
-          "description": "Account Type",
-          "type": "string"
-        },
-        "user": {
-          "$ref": "#/definitions/TransactionAccountUser",
-          "description": "Account User"
-        }
-      },
-      "required": [
-        "user",
-        "type",
-        "number",
-        "id"
-      ],
-      "title": "Transaction Account",
-      "type": "object"
-    },
-    "TransactionAccountUser": {
-      "description": "User schema returned along with accounts in transaction queries",
-      "properties": {
-        "cpf": {
-          "description": "User CPF",
-          "type": "string"
-        },
-        "first_name": {
-          "description": "User First Name",
-          "type": "string"
-        },
-        "id": {
-          "description": "User ID",
-          "type": "string"
-        },
-        "last_name": {
-          "description": "User Last Name",
-          "type": "string"
-        }
-      },
-      "required": [
-        "cpf",
-        "last_name",
-        "first_name",
-        "id"
-      ],
-      "title": "Transaction Account Schema",
-      "type": "object"
-    },
     "AccountRequest": {
       "description": "POST body for creating a account",
       "properties": {
@@ -358,6 +210,154 @@
         "id"
       ],
       "title": "Accounts Response",
+      "type": "object"
+    },
+    "TransactionRequest": {
+      "description": "POST body for cratong a transaction",
+      "properties": {
+        "account_number": {
+          "description": "Account Number",
+          "type": "integer"
+        },
+        "amount": {
+          "description": "Amount",
+          "format": "decimal",
+          "type": "string"
+        },
+        "recipient_number": {
+          "description": "Recipient Number",
+          "type": "integer"
+        },
+        "type": {
+          "description": "Type",
+          "enum": [
+            "transfer",
+            "deposit",
+            "withdraw"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "account_number",
+        "amount",
+        "type"
+      ],
+      "title": "Transaction Request",
+      "type": "object"
+    },
+    "TransactionResponse": {
+      "description": "Response schema for a single transaction",
+      "properties": {
+        "account": {
+          "$ref": "#/definitions/TransactionAccount",
+          "description": "Transaction Account"
+        },
+        "amount": {
+          "description": "Amount",
+          "type": "string"
+        },
+        "id": {
+          "description": "Transaction ID",
+          "format": "binary",
+          "type": "string"
+        },
+        "inserted_at": {
+          "description": "Insertion date",
+          "format": "date_time",
+          "type": "string"
+        },
+        "number": {
+          "description": "Number",
+          "type": "ineger"
+        },
+        "recipient": {
+          "$ref": "#/definitions/TransactionAccount",
+          "description": "Transaction Account Received"
+        },
+        "status": {
+          "description": "Status",
+          "type": "string"
+        },
+        "type": {
+          "description": "Type",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Update date",
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "recipient",
+        "account",
+        "status",
+        "type",
+        "amount",
+        "number",
+        "id"
+      ],
+      "title": "Transaction Response",
+      "type": "object"
+    },
+    "TransactionAccount": {
+      "description": "Account scheme that is returned along with the transactions",
+      "properties": {
+        "id": {
+          "description": "Account ID",
+          "format": "binary",
+          "type": "string"
+        },
+        "number": {
+          "description": "Account Number",
+          "type": "integer"
+        },
+        "type": {
+          "description": "Account Type",
+          "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/TransactionAccountUser",
+          "description": "Account User"
+        }
+      },
+      "required": [
+        "user",
+        "type",
+        "number",
+        "id"
+      ],
+      "title": "Transaction Account",
+      "type": "object"
+    },
+    "TransactionAccountUser": {
+      "description": "User schema returned along with accounts in transaction queries",
+      "properties": {
+        "cpf": {
+          "description": "User CPF",
+          "type": "string"
+        },
+        "first_name": {
+          "description": "User First Name",
+          "type": "string"
+        },
+        "id": {
+          "description": "User ID",
+          "type": "string"
+        },
+        "last_name": {
+          "description": "User Last Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "cpf",
+        "last_name",
+        "first_name",
+        "id"
+      ],
+      "title": "Transaction Account Schema",
       "type": "object"
     },
     "UserRequest": {
@@ -586,12 +586,6 @@
       "name": "Transactions",
       "description": "Trasactions routes"
     }
-  ],
-  "produces": [
-    "application/json"
-  ],
-  "consumes": [
-    "application/json"
   ],
   "paths": {
     "/api/accounts": {
@@ -1161,5 +1155,11 @@
       }
     }
   },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
   "swagger": "2.0"
 }
