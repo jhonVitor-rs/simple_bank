@@ -4,7 +4,7 @@ O Simple Bank é uma aplicação backend construída com Phoenix e PostgreSQL, c
 
 ## Pré-requisitos
 
-Para rodar esta aplicação, você precisará ter o Docker instalado em sua máquina. Acredito que a melhor instrução para a instalação do mesmo você contrara na [documentação oficial do Docker](https://docs.docker.com/engine/install/).
+Para rodar esta aplicação, você precisará ter o Docker instalado em sua máquina. Acredito que a melhor instrução para a instalação do mesmo você encontrara na [documentação oficial do Docker](https://docs.docker.com/engine/install/).
 
 ## Executando a aplicação
 
