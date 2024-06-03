@@ -106,7 +106,7 @@ defmodule SimpleBankWeb.TransactionController do
     description "Get a specified transaction by their ID"
     produces "application/json"
     tag "Transactions"
-    parameter :id, :path, :binary, "Transaction ID", required: true
+    parameter :id, :path, :string, "Transaction ID", required: true
     response 200, "OK", Schema.ref(:TransactionResponse)
     response 400, "Bad Request"
     response 404, "Not Found"

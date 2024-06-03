@@ -924,7 +924,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "type": "binary"
+            "type": "string"
           }
         ],
         "produces": [
